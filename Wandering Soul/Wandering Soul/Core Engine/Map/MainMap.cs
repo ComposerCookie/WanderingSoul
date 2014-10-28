@@ -34,24 +34,58 @@ namespace Lost_Soul
             _spawnedSpawnableLocation = new List<List<int>>();
             _spawnedLivingObjects = new List<List<List<int>>>();
             _drop = new List<List<List<SpawnItems>>>();
+            AtkM = new AttackManager(this);
+            AnimM = new AnimationManager();
             NullList = new List<int>();
+            LivingThing = new List<LivingObject>();
+            MiniText = new List<MiniText>();
         }
 
+        public void Update()
+        {
+            AtkM.Update();
+            AnimM.Update();
+
+            for (int i = MiniText.Count - 1; i >= 0; i--)
+            {
+                MiniText[i].Update();
+                if (MiniText[i].Time <= 0)
+                    MiniText.RemoveAt(i);
+            }
+
+            for (int r = Logic.CurrentParty.MainParty.MyParty[0].Y + _minY - Program.VisibleMaxY / 2 - 3; r < Logic.CurrentParty.MainParty.MyParty[0].Y + _minY + Program.VisibleMaxY / 2 + 3; r++)
+            {
+                for (int t = Logic.CurrentParty.MainParty.MyParty[0].X + _minX - Program.VisibleMaxX / 2 - 3; t < Logic.CurrentParty.MainParty.MyParty[0].X + _minX + Program.VisibleMaxX / 2 + 3; t++)
+                {
+                    if (SpawnedSpawnableLocation[r][t] == -1)
+                        continue;
+
+                    SpawnedSpawnable[SpawnedSpawnableLocation[r][t]].Update();
+                }
+            }
+        }
+
+        public AnimationManager AnimM { get; set; }
         public List<int> NullList { get; set; }
+        public List<MiniText> MiniText { get; set; }
+
+        public void DrawMiniText(RenderWindow rw)
+        {
+            foreach (MiniText m in MiniText)
+                m.Draw(rw);
+        }
 
         public void DrawMap(RenderWindow rw)
         {
             SFML.Graphics.Sprite s;
-            for (int r = Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].Y + _minY - 26; r < Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].Y + _minY + 25; r++)
+            for (int r = Logic.CurrentParty.MainParty.MyParty[0].Y + _minY - Program.VisibleMaxY / 2 - 3; r < Logic.CurrentParty.MainParty.MyParty[0].Y + _minY + Program.VisibleMaxY / 2 + 3; r++)
             {
-                for (int t = Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].X + _minX - 34; t < Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].X + _minX + 33; t++)
+                for (int t = Logic.CurrentParty.MainParty.MyParty[0].X + _minX - Program.VisibleMaxX / 2 - 3; t < Logic.CurrentParty.MainParty.MyParty[0].X + _minX + Program.VisibleMaxX / 2 + 3; t++)
                 {
-                    s = new SFML.Graphics.Sprite(Program.Data.MySprites[0].Texture);
                     if (_y[r].Tile[t].ID == -1)
                         continue;
-                    s.TextureRect = new IntRect(Program.Data.MyTileData[Program.Data.MyTerrain[_spawnedTerrain[_y[r].Tile[t].ID].Type].Tile].SourceX, Program.Data.MyTileData[Program.Data.MyTerrain[_spawnedTerrain[_y[r].Tile[t].ID].Type].Tile].SourceY, Program.Data.TileSizeX, Program.Data.TileSizeY);
-                    s.Position = new Vector2f(t * Program.Data.TileSizeX, r * Program.Data.TileSizeY);
-                    rw.Draw(s);
+
+                    _y[r].Tile[t].Draw(rw, this, t, r);
 
                     if (_drop[r][t].Count > 0)
                     {
@@ -66,22 +100,29 @@ namespace Lost_Soul
 
         public void DrawNPC(RenderWindow rw)
         {
-            foreach (LivingObject o in Program.Data.MyLivingObject)
+            //foreach (LivingObject LivingThing[i] in Program.Data.MyLivingObject)
+            for (int i = LivingThing.Count - 1; i >= 0; i--)
             {
-                if (o == null)
+                if (LivingThing[i] == null)
                     continue;
-                if (o.X + _minX < Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].X + _minX + 33 && o.X + _minX > Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].X + _minX - 34 && o.Y + _minY < Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].Y + _minY + 25 && o.Y + _minY > Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].Y + _minY - 26)
+                if (LivingThing[i].X + _minX < Logic.CurrentParty.MainParty.MyParty[0].X + _minX + Program.VisibleMaxX / 2 + 3 && LivingThing[i].X + _minX > Logic.CurrentParty.MainParty.MyParty[0].X + _minX - Program.VisibleMaxX / 2 - 3 && LivingThing[i].Y + _minY < Logic.CurrentParty.MainParty.MyParty[0].Y + _minY + Program.VisibleMaxY / 2 + 3 && LivingThing[i].Y + _minY > Logic.CurrentParty.MainParty.MyParty[0].Y + _minY - Program.VisibleMaxY / 2 - 3)
                 {
-                    o.Draw(rw);
+                    LivingThing[i].Draw(rw);
                 }
             }
         }
 
+        public void DrawAnimation(RenderWindow rw)
+        {
+            AtkM.Draw(rw);
+            AnimM.Draw(rw);
+        }
+
         public void DrawSpawnBot(RenderWindow rw)
         {
-            for (int r = Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].Y + _minY - 26; r < Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].Y + _minY + 25; r++)
+            for (int r = Logic.CurrentParty.MainParty.MyParty[0].Y + _minY - Program.VisibleMaxY / 2 - 3; r < Logic.CurrentParty.MainParty.MyParty[0].Y + _minY + Program.VisibleMaxY / 2 + 3; r++)
             {
-                for (int t = Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].X + _minX - 34; t < Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].X + _minX + 33; t++)
+                for (int t = Logic.CurrentParty.MainParty.MyParty[0].X + _minX - Program.VisibleMaxX / 2 - 3; t < Logic.CurrentParty.MainParty.MyParty[0].X + _minX + Program.VisibleMaxX / 2 + 3; t++)
                 {
                     if (_spawnedSpawnableLocation[r][t] == -1)
                         continue;
@@ -92,15 +133,21 @@ namespace Lost_Soul
 
         public void DrawSpawnFringe(RenderWindow rw)
         {
-            for (int r = Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].Y + _minY - 26; r < Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].Y + _minY + 25; r++)
+            for (int r = Logic.CurrentParty.MainParty.MyParty[0].Y + _minY - Program.VisibleMaxY / 2 - 3; r < Logic.CurrentParty.MainParty.MyParty[0].Y + _minY + Program.VisibleMaxY / 2 + 3; r++)
             {
-                for (int t = Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].X + _minX - 34; t < Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].X + _minX + 33; t++)
+                for (int t = Logic.CurrentParty.MainParty.MyParty[0].X + _minX - Program.VisibleMaxX / 2 - 3; t < Logic.CurrentParty.MainParty.MyParty[0].X + _minX + Program.VisibleMaxX / 2 + 3; t++)
                 {
                     if (_spawnedSpawnableLocation[r][t] == -1)
                         continue;
                     _spawnedSpawnable[_spawnedSpawnableLocation[r][t]].DrawTop(rw);
                 }
             }
+        }
+
+        public void AddLivingThing(LivingObject p, int x, int y)
+        {
+            LivingThing.Add(p);
+            SpawnedLivingThing[y + MinY][x + MinX].Add(LivingThing.Count - 1);
         }
 
         public int MinX
@@ -162,5 +209,8 @@ namespace Lost_Soul
             get{return _spawnedLivingObjects;}
             set{_spawnedLivingObjects = value;}
         }
+
+        public AttackManager AtkM { get; set; }
+        public List<LivingObject> LivingThing { get; set; }
     }
 }

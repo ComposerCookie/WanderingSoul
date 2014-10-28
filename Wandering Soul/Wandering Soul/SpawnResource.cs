@@ -13,6 +13,7 @@ namespace Lost_Soul
         public int CurHealth { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
+        public Map OnMap { get; set; }
 
         public SpawnResource(int id, int x, int y)
         {
@@ -22,10 +23,14 @@ namespace Lost_Soul
             CurHealth = Program.Data.GetResourceList()[ID].MaxHealth;
         }
 
+        public void Update()
+        {
+        }
+
         public void DrawBot(RenderWindow rw)
         {
             SFML.Graphics.Sprite s = new SFML.Graphics.Sprite(Program.Data.SpriteBasedOnType(SpriteType.Resource)[Program.Data.GetResourceList()[ID].Sprite]);
-            s.Position = new Vector2f((X + Program.MyMap.MinX) * Program.Data.TileSizeX, (Y + Program.MyMap.MinY) * Program.Data.TileSizeY);
+            s.Position = new Vector2f((X + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX) * Program.Data.TileSizeX, (Y + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY) * Program.Data.TileSizeY);
             s.TextureRect = new IntRect(0, (int)(s.Texture.Size.Y - Program.Data.GetResourceList()[ID].SizeY * 16), (int)(s.Texture.Size.X), Program.Data.GetResourceList()[ID].SizeY * 16);
             rw.Draw(s);
         }
@@ -33,7 +38,7 @@ namespace Lost_Soul
         public void DrawTop(RenderWindow rw)
         {
             SFML.Graphics.Sprite s = new SFML.Graphics.Sprite(Program.Data.SpriteBasedOnType(SpriteType.Resource)[Program.Data.GetResourceList()[ID].Sprite]);
-            s.Position = new Vector2f((X + Program.MyMap.MinX) * Program.Data.TileSizeX, (Y + Program.MyMap.MinY - 1) * Program.Data.TileSizeX);
+            s.Position = new Vector2f((X + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX) * Program.Data.TileSizeX, (Y + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY - 1) * Program.Data.TileSizeX);
             s.TextureRect = new IntRect(0, 0, (int)(s.Texture.Size.X), (int)(s.Texture.Size.Y - Program.Data.GetResourceList()[ID].SizeY * 16));
             rw.Draw(s);
         }

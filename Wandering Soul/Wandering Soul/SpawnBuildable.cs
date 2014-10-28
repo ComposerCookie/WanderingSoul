@@ -15,26 +15,51 @@ namespace Lost_Soul
         public int Y { get; set; }
         public bool Builded { get; set; }
         public Dictionary<SpawnItems, List<SpawnItems>> Required { get; set; }
-        public Dictionary<SpawnItems, int> Built { get; set; }
+        public Dictionary<SpawnItems, List<SpawnItems>> Built { get; set; }
+        public Map OnMap { get; set; }
+
+        public SpawnBuildable()
+        {
+            CurHealth = Program.Data.GetBuildableList()[ID].MaxHealth;
+
+            Required = new Dictionary<SpawnItems, List<SpawnItems>>();
+            Built = new Dictionary<SpawnItems, List<SpawnItems>>();
+
+            for (int i = 0; i < Program.Data.GetBuildableList()[ID].RequiredItems.Count; i++)
+            {
+                Required.Add(new SpawnItems(Program.Data.GetBuildableList()[ID].RequiredItems.ElementAt(i).Key.ID), new List<SpawnItems>());
+                Built.Add(new SpawnItems(Program.Data.GetBuildableList()[ID].RequiredItems.ElementAt(i).Key.ID), new List<SpawnItems>());
+            }
+        }
+
+        public virtual void Update()
+        {
+        }
 
         public SpawnBuildable(int id, int x, int y)
         {
             ID = id;
             X = x;
             Y = y;
-            CurHealth = Program.Data.GetBuildableList()[ID].MaxHealth;
+            CurHealth = 1;
 
             Required = new Dictionary<SpawnItems, List<SpawnItems>>();
-            Built = new Dictionary<SpawnItems, int>();
+            Built = new Dictionary<SpawnItems, List<SpawnItems>>();
 
             for (int i = 0; i < Program.Data.GetBuildableList()[ID].RequiredItems.Count; i++)
             {
                 Required.Add(new SpawnItems(Program.Data.GetBuildableList()[ID].RequiredItems.ElementAt(i).Key.ID), new List<SpawnItems>());
-                Built.Add(new SpawnItems(Program.Data.GetBuildableList()[ID].RequiredItems.ElementAt(i).Key.ID), 0);
+                Built.Add(new SpawnItems(Program.Data.GetBuildableList()[ID].RequiredItems.ElementAt(i).Key.ID), new List<SpawnItems>());
             }
         }
 
-        public void DrawBot(RenderWindow rw)
+        public virtual void FinishBuilding()
+        {
+            Builded = true;
+            CurHealth = Program.Data.GetBuildableList()[ID].MaxHealth;
+        }
+
+        public virtual void DrawBot(RenderWindow rw)
         {
             SFML.Graphics.Sprite s;
             if (Builded)
@@ -45,26 +70,26 @@ namespace Lost_Soul
             {
                 s = new SFML.Graphics.Sprite(Program.Data.SpriteBasedOnType(SpriteType.BuildingSprite)[Program.Data.GetBuildableList()[ID].StartSprite]);
             }
-            s.Position = new Vector2f((X + Program.MyMap.MinX) * Program.Data.TileSizeX, (Y + Program.MyMap.MinY) * Program.Data.TileSizeY);
+            s.Position = new Vector2f((X + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX) * Program.Data.TileSizeX, (Y + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY) * Program.Data.TileSizeY);
             s.TextureRect = new IntRect(0, (int)(s.Texture.Size.Y - Program.Data.GetBuildableList()[ID].SizeY * 16), (int)(s.Texture.Size.X), Program.Data.GetBuildableList()[ID].SizeY * 16);
             rw.Draw(s);
         }
 
-        public void DrawTop(RenderWindow rw)
+        public virtual void DrawTop(RenderWindow rw)
         {
             if (Builded)
             {
                 SFML.Graphics.Sprite s = new SFML.Graphics.Sprite(Program.Data.SpriteBasedOnType(SpriteType.BuildingSprite)[Program.Data.GetBuildableList()[ID].Sprite]);
-                s.Position = new Vector2f((X + Program.MyMap.MinX) * Program.Data.TileSizeX, (Y + Program.MyMap.MinY - 1) * Program.Data.TileSizeX);
+                s.Position = new Vector2f((X + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX) * Program.Data.TileSizeX, (Y + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY - 1) * Program.Data.TileSizeX);
                 s.TextureRect = new IntRect(0, 0, (int)(s.Texture.Size.X), (int)(s.Texture.Size.Y - Program.Data.GetBuildableList()[ID].SizeY * 16));
                 rw.Draw(s);
             }
         }
 
-        public void DrawBot(RenderWindow rw, int x, int y, bool yaynay)
+        public virtual void DrawBot(RenderWindow rw, int x, int y, bool yaynay)
         {
             SFML.Graphics.Sprite s = new SFML.Graphics.Sprite(Program.Data.SpriteBasedOnType(SpriteType.BuildingSprite)[Program.Data.GetBuildableList()[ID].Sprite]);
-            s.Position = new Vector2f((x + Program.MyMap.MinX) * Program.Data.TileSizeX, (y + Program.MyMap.MinY) * Program.Data.TileSizeY);
+            s.Position = new Vector2f((x + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX) * Program.Data.TileSizeX, (y + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY) * Program.Data.TileSizeY);
             s.TextureRect = new IntRect(0, (int)(s.Texture.Size.Y - Program.Data.GetBuildableList()[ID].SizeY * 16), (int)(s.Texture.Size.X), Program.Data.GetBuildableList()[ID].SizeY * 16);
             rw.Draw(s);
             RectangleShape r = new RectangleShape(new Vector2f((int)(s.Texture.Size.X), Program.Data.GetBuildableList()[ID].SizeY * 16));
@@ -81,10 +106,10 @@ namespace Lost_Soul
             rw.Draw(r);
         }
 
-        public void DrawTop(RenderWindow rw, int x, int y, bool yaynay)
+        public virtual void DrawTop(RenderWindow rw, int x, int y, bool yaynay)
         {
             SFML.Graphics.Sprite s = new SFML.Graphics.Sprite(Program.Data.SpriteBasedOnType(SpriteType.BuildingSprite)[Program.Data.GetBuildableList()[ID].Sprite]);
-            s.Position = new Vector2f((x + Program.MyMap.MinX) * Program.Data.TileSizeX, (y + Program.MyMap.MinY - 1) * Program.Data.TileSizeX);
+            s.Position = new Vector2f((x + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX) * Program.Data.TileSizeX, (y + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY - 1) * Program.Data.TileSizeX);
             s.TextureRect = new IntRect(0, 0, (int)(s.Texture.Size.X), (int)(s.Texture.Size.Y - Program.Data.GetBuildableList()[ID].SizeY * 16));
             rw.Draw(s);
             if (Program.Data.GetBuildableList()[ID].SizeY > 1)

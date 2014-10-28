@@ -149,7 +149,7 @@ namespace Lost_Soul
 
         public void PlayerInventorySizeChange()
         {
-            for (int i = 0; i < Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].ExtraInventorySpace + 8; i++ )
+            for (int i = 0; i < Logic.CurrentParty.MainParty.MyParty[0].ExtraInventorySpace + 8; i++ )
             {
                 MyButton[i].ID = 7;
             }

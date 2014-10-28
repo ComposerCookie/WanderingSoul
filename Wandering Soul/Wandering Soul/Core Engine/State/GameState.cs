@@ -12,10 +12,14 @@ namespace Lost_Soul
         int CurrentGUI { get; set; }
         void Draw();
         void Update();
+        void HandleResize();
         void HandleKey(Keyboard.Key key);
-        void HandleMouse(Mouse.Button key);
+        void HandleMouseClickLeft();
+        void HandleMouseClickRight();
         void HandleMouseMove();
         bool MovingGUI { get; set; }
         List<GUI> GameGUI { get; set; }
+        List<int> GUIOrder { get; set; }
+
     }
 }

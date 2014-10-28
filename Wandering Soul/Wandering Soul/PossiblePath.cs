@@ -73,22 +73,28 @@ namespace Lost_Soul
                             }
                             else
                             {
-                                if (Y + Program.MyMap.MinY + 1 > Program.MyMap.MinY + Program.MyMap.MaxY && X + Program.MyMap.MinX + 1 > Program.MyMap.MinX + Program.MyMap.MaxX)
+                                if (Y + Logic.Pathfinder.CurMap.MinY + 1 > Logic.Pathfinder.CurMap.MinY + Logic.Pathfinder.CurMap.MaxY && X + Logic.Pathfinder.CurMap.MinX + 1 > Logic.Pathfinder.CurMap.MinX + Logic.Pathfinder.CurMap.MaxX)
                                     break;
-                                if (Program.MyMap.SpawnedSpawnableLocation[Y + Program.MyMap.MinY][X + Program.MyMap.MinX - 1] >= 0 && Logic.GetBlockedBySpawnable(X + Program.MyMap.MinX - 1, Y + Program.MyMap.MinY))
+                                if (Logic.Pathfinder.CurMap.SpawnedSpawnableLocation[Y + Logic.Pathfinder.CurMap.MinY][X + Logic.Pathfinder.CurMap.MinX - 1] >= 0 && Logic.GetBlockedBySpawnable(X + Logic.Pathfinder.CurMap.MinX - 1, Y + Logic.Pathfinder.CurMap.MinY, Logic.Pathfinder.CurMap, 0))
                                 {
-                                    if (Program.MyMap.SpawnedSpawnable[Program.MyMap.SpawnedSpawnableLocation[Y + Program.MyMap.MinY][X + Program.MyMap.MinX - 1]] is SpawnBuildable && Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].CurrentAction == 2 && Y == Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].TargetY && X - 1 == Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].TargetX)
+                                    if (Logic.Pathfinder.CurMap.SpawnedSpawnable[Logic.Pathfinder.CurMap.SpawnedSpawnableLocation[Y + Logic.Pathfinder.CurMap.MinY][X + Logic.Pathfinder.CurMap.MinX - 1]] is SpawnBuildable && Logic.Pathfinder == Logic.CurrentParty.MainParty.MyParty[0] && (Logic.CurrentParty.MainParty.MyParty[0].CurrentAction == 2 || Logic.CurrentParty.MainParty.MyParty[0].CurrentAction == 4) && Y == Logic.CurrentParty.MainParty.MyParty[0].TargetY && X - 1 == Logic.CurrentParty.MainParty.MyParty[0].TargetX)
                                     {
-                                        b = (SpawnBuildable)Program.MyMap.SpawnedSpawnable[Program.MyMap.SpawnedSpawnableLocation[Y + Program.MyMap.MinY][X + Program.MyMap.MinX - 1]];
+                                        b = (SpawnBuildable)Logic.Pathfinder.CurMap.SpawnedSpawnable[Logic.Pathfinder.CurMap.SpawnedSpawnableLocation[Y + Logic.Pathfinder.CurMap.MinY][X + Logic.Pathfinder.CurMap.MinX - 1]];
                                         if (b.Builded)
-                                            break;
+                                        {
+                                            if (Logic.CurrentParty.MainParty.MyParty[0].CurrentAction == 4)
+                                            {
+                                            }
+                                            else
+                                                break;
+                                        }
                                     }
                                     else
                                     {
                                         break;
                                     }
                                 }
-                                if (Program.MyMap.SpawnedLivingThing[Y + Program.MyMap.MinY][X + Program.MyMap.MinX - 1].Count > 0)
+                                if (Logic.Pathfinder.CurMap.SpawnedLivingThing[Y + Logic.Pathfinder.CurMap.MinY][X + Logic.Pathfinder.CurMap.MinX - 1].Count > 0)
                                     break;
                                 if (Logic.NextPathFindingSession.ContainsKey(new KeyValuePair<int, int>(X - 1, Y)))
                                 {
@@ -116,22 +122,29 @@ namespace Lost_Soul
                             }
                             else
                             {
-                                if (Y + Program.MyMap.MinY + 1 > Program.MyMap.MinY + Program.MyMap.MaxY && X + Program.MyMap.MinX + 1 > Program.MyMap.MinX + Program.MyMap.MaxX)
+                                if (Y + Logic.Pathfinder.CurMap.MinY + 1 > Logic.Pathfinder.CurMap.MinY + Logic.Pathfinder.CurMap.MaxY && X + Logic.Pathfinder.CurMap.MinX + 1 > Logic.Pathfinder.CurMap.MinX + Logic.Pathfinder.CurMap.MaxX)
                                     break;
-                                if (Program.MyMap.SpawnedSpawnableLocation[Y + Program.MyMap.MinY - 1][X + Program.MyMap.MinX] >= 0 && Logic.GetBlockedBySpawnable(X + Program.MyMap.MinX, Y + Program.MyMap.MinY - 1))
+                                if (Logic.Pathfinder.CurMap.SpawnedSpawnableLocation[Y + Logic.Pathfinder.CurMap.MinY - 1][X + Logic.Pathfinder.CurMap.MinX] >= 0 && Logic.GetBlockedBySpawnable(X + Logic.Pathfinder.CurMap.MinX, Y + Logic.Pathfinder.CurMap.MinY - 1, Logic.Pathfinder.CurMap, 0))
                                 {
-                                    if (Program.MyMap.SpawnedSpawnable[Program.MyMap.SpawnedSpawnableLocation[Y + Program.MyMap.MinY - 1][X + Program.MyMap.MinX]] is SpawnBuildable && Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].CurrentAction == 2 && Y - 1 == Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].TargetY && X == Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].TargetX)
+                                    if (Logic.Pathfinder.CurMap.SpawnedSpawnable[Logic.Pathfinder.CurMap.SpawnedSpawnableLocation[Y + Logic.Pathfinder.CurMap.MinY - 1][X + Logic.Pathfinder.CurMap.MinX]] is SpawnBuildable && Logic.Pathfinder == Logic.CurrentParty.MainParty.MyParty[0] && (Logic.CurrentParty.MainParty.MyParty[0].CurrentAction == 2 || Logic.CurrentParty.MainParty.MyParty[0].CurrentAction == 4) && Y - 1 == Logic.CurrentParty.MainParty.MyParty[0].TargetY && X == Logic.CurrentParty.MainParty.MyParty[0].TargetX)
                                     {
-                                        b = (SpawnBuildable)Program.MyMap.SpawnedSpawnable[Program.MyMap.SpawnedSpawnableLocation[Y + Program.MyMap.MinY - 1][X + Program.MyMap.MinX]];
+                                        b = (SpawnBuildable)Logic.Pathfinder.CurMap.SpawnedSpawnable[Logic.Pathfinder.CurMap.SpawnedSpawnableLocation[Y + Logic.Pathfinder.CurMap.MinY - 1][X + Logic.Pathfinder.CurMap.MinX]];
                                         if (b.Builded)
-                                            break;
+                                        {
+                                            if (Logic.CurrentParty.MainParty.MyParty[0].CurrentAction == 4)
+                                            {
+                                            }
+                                            else
+                                                break;
+                                        }
+                                        
                                     }
                                     else
                                     {
                                         break;
                                     }
                                 }
-                                if (Program.MyMap.SpawnedLivingThing[Y + Program.MyMap.MinY - 1][X + Program.MyMap.MinX].Count > 0)
+                                if (Logic.Pathfinder.CurMap.SpawnedLivingThing[Y + Logic.Pathfinder.CurMap.MinY - 1][X + Logic.Pathfinder.CurMap.MinX].Count > 0)
                                     break;
                                 if (Logic.NextPathFindingSession.ContainsKey(new KeyValuePair<int, int>(X, Y - 1)))
                                 {
@@ -159,22 +172,28 @@ namespace Lost_Soul
                             }
                             else
                             {
-                                if (Y + Program.MyMap.MinY + 1 > Program.MyMap.MinY + Program.MyMap.MaxY && X + Program.MyMap.MinX + 1 > Program.MyMap.MinX + Program.MyMap.MaxX)
+                                if (Y + Logic.Pathfinder.CurMap.MinY + 1 > Logic.Pathfinder.CurMap.MinY + Logic.Pathfinder.CurMap.MaxY && X + Logic.Pathfinder.CurMap.MinX + 1 > Logic.Pathfinder.CurMap.MinX + Logic.Pathfinder.CurMap.MaxX)
                                     break;
-                                if (Program.MyMap.SpawnedSpawnableLocation[Y + Program.MyMap.MinY][X + Program.MyMap.MinX + 1] >= 0 && Logic.GetBlockedBySpawnable(X + Program.MyMap.MinX + 1, Y + Program.MyMap.MinY))
+                                if (Logic.Pathfinder.CurMap.SpawnedSpawnableLocation[Y + Logic.Pathfinder.CurMap.MinY][X + Logic.Pathfinder.CurMap.MinX + 1] >= 0 && Logic.GetBlockedBySpawnable(X + Logic.Pathfinder.CurMap.MinX + 1, Y + Logic.Pathfinder.CurMap.MinY, Logic.Pathfinder.CurMap, 0))
                                 {
-                                    if (Program.MyMap.SpawnedSpawnable[Program.MyMap.SpawnedSpawnableLocation[Y + Program.MyMap.MinY][X + Program.MyMap.MinX + 1]] is SpawnBuildable && Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].CurrentAction == 2 && Y == Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].TargetY && X + 1== Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].TargetX)
+                                    if (Logic.Pathfinder.CurMap.SpawnedSpawnable[Logic.Pathfinder.CurMap.SpawnedSpawnableLocation[Y + Logic.Pathfinder.CurMap.MinY][X + Logic.Pathfinder.CurMap.MinX + 1]] is SpawnBuildable && Logic.Pathfinder == Logic.CurrentParty.MainParty.MyParty[0] && (Logic.CurrentParty.MainParty.MyParty[0].CurrentAction == 2 || Logic.CurrentParty.MainParty.MyParty[0].CurrentAction == 4) && Y == Logic.CurrentParty.MainParty.MyParty[0].TargetY && X + 1 == Logic.CurrentParty.MainParty.MyParty[0].TargetX)
                                     {
-                                        b = (SpawnBuildable)Program.MyMap.SpawnedSpawnable[Program.MyMap.SpawnedSpawnableLocation[Y + Program.MyMap.MinY][X + Program.MyMap.MinX + 1]];
+                                        b = (SpawnBuildable)Logic.Pathfinder.CurMap.SpawnedSpawnable[Logic.Pathfinder.CurMap.SpawnedSpawnableLocation[Y + Logic.Pathfinder.CurMap.MinY][X + Logic.Pathfinder.CurMap.MinX + 1]];
                                         if (b.Builded)
-                                            break;
+                                        {
+                                            if (Logic.CurrentParty.MainParty.MyParty[0].CurrentAction == 4)
+                                            {
+                                            }
+                                            else
+                                                break;
+                                        }
                                     }
                                     else
                                     {
                                         break;
                                     }
                                 }
-                                if (Program.MyMap.SpawnedLivingThing[Y + Program.MyMap.MinY][X + Program.MyMap.MinX + 1].Count > 0)
+                                if (Logic.Pathfinder.CurMap.SpawnedLivingThing[Y + Logic.Pathfinder.CurMap.MinY][X + Logic.Pathfinder.CurMap.MinX + 1].Count > 0)
                                     break;
                                 if (Logic.NextPathFindingSession.ContainsKey(new KeyValuePair<int, int>(X + 1, Y)))
                                 {
@@ -202,22 +221,28 @@ namespace Lost_Soul
                             }
                             else
                             {
-                                if (Y + Program.MyMap.MinY + 1 > Program.MyMap.MinY + Program.MyMap.MaxY && X + Program.MyMap.MinX + 1 > Program.MyMap.MinX + Program.MyMap.MaxX)
+                                if (Y + Logic.Pathfinder.CurMap.MinY + 1 > Logic.Pathfinder.CurMap.MinY + Logic.Pathfinder.CurMap.MaxY && X + Logic.Pathfinder.CurMap.MinX + 1 > Logic.Pathfinder.CurMap.MinX + Logic.Pathfinder.CurMap.MaxX)
                                     break;
-                                if (Program.MyMap.SpawnedSpawnableLocation[Y + Program.MyMap.MinY + 1][X + Program.MyMap.MinX] >= 0 && Logic.GetBlockedBySpawnable(X + Program.MyMap.MinX, Y + Program.MyMap.MinY + 1))
+                                if (Logic.Pathfinder.CurMap.SpawnedSpawnableLocation[Y + Logic.Pathfinder.CurMap.MinY + 1][X + Logic.Pathfinder.CurMap.MinX] >= 0 && Logic.GetBlockedBySpawnable(X + Logic.Pathfinder.CurMap.MinX, Y + Logic.Pathfinder.CurMap.MinY + 1, Logic.Pathfinder.CurMap, 0))
                                 {
-                                    if (Program.MyMap.SpawnedSpawnable[Program.MyMap.SpawnedSpawnableLocation[Y + Program.MyMap.MinY + 1][X + Program.MyMap.MinX]] is SpawnBuildable && Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].CurrentAction == 2 && Y + 1 == Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].TargetY && X == Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].TargetX)
+                                    if (Logic.Pathfinder.CurMap.SpawnedSpawnable[Logic.Pathfinder.CurMap.SpawnedSpawnableLocation[Y + Logic.Pathfinder.CurMap.MinY + 1][X + Logic.Pathfinder.CurMap.MinX]] is SpawnBuildable && Logic.Pathfinder == Logic.CurrentParty.MainParty.MyParty[0] && (Logic.CurrentParty.MainParty.MyParty[0].CurrentAction == 2 || Logic.CurrentParty.MainParty.MyParty[0].CurrentAction == 4) && Y + 1 == Logic.CurrentParty.MainParty.MyParty[0].TargetY && X == Logic.CurrentParty.MainParty.MyParty[0].TargetX)
                                     {
-                                        b = (SpawnBuildable)Program.MyMap.SpawnedSpawnable[Program.MyMap.SpawnedSpawnableLocation[Y + Program.MyMap.MinY + 1][X + Program.MyMap.MinX]];
+                                        b = (SpawnBuildable)Logic.Pathfinder.CurMap.SpawnedSpawnable[Logic.Pathfinder.CurMap.SpawnedSpawnableLocation[Y + Logic.Pathfinder.CurMap.MinY + 1][X + Logic.Pathfinder.CurMap.MinX]];
                                         if (b.Builded)
-                                            break;
+                                        {
+                                            if (Logic.CurrentParty.MainParty.MyParty[0].CurrentAction == 4)
+                                            {
+                                            }
+                                            else
+                                                break;
+                                        }
                                     }
                                     else
                                     {
                                         break;
                                     }
                                 }
-                                if (Program.MyMap.SpawnedLivingThing[Y + Program.MyMap.MinY + 1][X + Program.MyMap.MinX].Count > 0)
+                                if (Logic.Pathfinder.CurMap.SpawnedLivingThing[Y + Logic.Pathfinder.CurMap.MinY + 1][X + Logic.Pathfinder.CurMap.MinX].Count > 0)
                                     break;
                                 if (Logic.NextPathFindingSession.ContainsKey(new KeyValuePair<int, int>(X, Y + 1)))
                                 {

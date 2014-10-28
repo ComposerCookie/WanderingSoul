@@ -47,10 +47,14 @@ namespace Lost_Soul
             _x = 0;
             _y = 0;
 
-            _index = Program.Data.MyLivingObject.Count;
-            Program.MyMap.SpawnedLivingThing[Y + Program.MyMap.MinY][X + Program.MyMap.MinX].Add(_index);
+            //CurMap = Logic.CurrentWorld.OverWorld;
+
+            //_index = CurMap.LivingThing.Count;
+            //CurMap.SpawnedLivingThing[Y + CurMap.MinY][X + CurMap.MinX].Add(_index);
 
             Level = 1;
+
+            SideMapID = 0;
         }
 
         public LivingObject(string name, int type, int sprite, int maptype, int x, int y, int speed, int maxHP)
@@ -76,8 +80,55 @@ namespace Lost_Soul
             Level = 1;
 
             _generalBehavior = 0;
-            _index = Program.Data.MyLivingObject.Count;
-            Program.MyMap.SpawnedLivingThing[Y][X].Add(_index);
+            _index = CurMap.LivingThing.Count;
+            //CurMap.SpawnedLivingThing[Y][X].Add(_index);
+            CurMap = Logic.CurrentWorld.OverWorld;
+
+            SideMapID = 0;
+        }
+
+        public void PutOnMap()
+        {
+            X = Logic.CurrentWorld.SpawnMapX;
+            Y = Logic.CurrentWorld.SpawnMapY;
+            OnMapType = Logic.CurrentWorld.SpawnPlaceMapType;
+            SideMapID = Logic.CurrentWorld.SpawnMapIndex;
+
+            switch ((MapType)OnMapType)
+            {
+                case MapType.MainMap:
+                    if (CurMap != null)
+                    {
+                        CurMap.LivingThing.Remove(this);
+                        CurMap.SpawnedLivingThing[Y + CurMap.MinY][X + CurMap.MinX].Remove(Index);
+                    }
+                    CurMap = Logic.CurrentWorld.OverWorld;
+                    CurMap.LivingThing.Add(this);
+                    Index = CurMap.LivingThing.Count - 1;
+                    CurMap.SpawnedLivingThing[Y + CurMap.MinY][X + CurMap.MinX].Add(Index);
+                    break;
+                case MapType.SmallMap:
+                    if (CurMap != null)
+                    {
+                        CurMap.LivingThing.Remove(this);
+                        CurMap.SpawnedLivingThing[Y + CurMap.MinY][X + CurMap.MinX].Remove(Index);
+                    }
+                    CurMap = Logic.CurrentWorld.SmallMap[SideMapID];
+                    CurMap.LivingThing.Add(this);
+                    Index = CurMap.LivingThing.Count - 1;
+                    CurMap.SpawnedLivingThing[Y + CurMap.MinY][X + CurMap.MinX].Add(Index);
+                    break;
+            }
+
+            IsWalking = false;
+            _walkCooldown = 30;
+            _walkCount = 0;
+            Moved = false;
+            LastX = X;
+            LastY = Y;
+            TargetX = X;
+            TargetY = Y;
+            Dir = 3;
         }
 
         public virtual void Walk()
@@ -85,19 +136,26 @@ namespace Lost_Soul
 
         }
 
-        public virtual void Walk(int dir)
+        public virtual void Walk(int dir, bool change)
         {
             if (_isWalking)
                 return;
 
             _walkCount = 0;
-            _dir = dir;
+            if (change)
+            {
+                _dir = dir;
+            }
+            
             _targetDir = dir;
 
-            int tempx = X + Program.MyMap.MinX;
-            int tempY = Y + Program.MyMap.MinY;
+            LastX = _x;
+            LastY = _y;
 
-            switch (dir)
+            int tempx = X + CurMap.MinX;
+            int tempY = Y + CurMap.MinY;
+
+            switch (_targetDir)
             {
                 case 0:
                     tempx--;
@@ -113,95 +171,113 @@ namespace Lost_Soul
                     break;
             }
 
-            if (Logic.GetBlockedByTerrain(tempx, tempY))
+            //if (OnMapType == (int)MapType.MainMap)
+            //    m = Logic.MainMap;
+
+            if (Logic.BlockedAt(tempx, tempY, CurMap, 0))
             {
                 _walkCooldown = 30;
                 return;
             }
 
-            if (Logic.GetBlockedBySpawnable(tempx, tempY))
-            {
-                _walkCooldown = 30;
-                return;
-            }
-            if (Logic.GetBlockedByLivingThing(tempx, tempY))
-            {
-                _walkCooldown = 30;
-                return;
-            }
             _isWalking = true;
+            Moved = true;
         }
 
         public virtual void Update()
         {
             if (_isWalking)
             {
-                _walkCount += _speed;
-                if (_walkCount >= 16)
+                if (_walkCount >= 64 && Moved)
                 {
-                    _walkCount = 0;
-                    _isWalking = false;
-
                     switch (_targetDir)
                     {
                         case 0:
-                            Program.MyMap.SpawnedLivingThing[Y + Program.MyMap.MinY][X + Program.MyMap.MinX].Remove(_index);
+                            CurMap.SpawnedLivingThing[Y + CurMap.MinY][X + CurMap.MinX].Remove(_index);
                             _x--;
-                            Program.MyMap.SpawnedLivingThing[Y + Program.MyMap.MinY][X + Program.MyMap.MinX].Add(_index);
+                            CurMap.SpawnedLivingThing[Y + CurMap.MinY][X + CurMap.MinX].Add(_index);
+                            Moved = false;
                             break;
                         case 1:
-                            Program.MyMap.SpawnedLivingThing[Y + Program.MyMap.MinY][X + Program.MyMap.MinX].Remove(_index);
+                            CurMap.SpawnedLivingThing[Y + CurMap.MinY][X + CurMap.MinX].Remove(_index);
                             _y--;
-                            Program.MyMap.SpawnedLivingThing[Y + Program.MyMap.MinY][X + Program.MyMap.MinX].Add(_index);
+                            CurMap.SpawnedLivingThing[Y + CurMap.MinY][X + CurMap.MinX].Add(_index);
+                            Moved = false;
                             break;
                         case 2:
-                            Program.MyMap.SpawnedLivingThing[Y + Program.MyMap.MinY][X + Program.MyMap.MinX].Remove(_index);
+                            CurMap.SpawnedLivingThing[Y + CurMap.MinY][X + CurMap.MinX].Remove(_index);
                             _x++;
-                            Program.MyMap.SpawnedLivingThing[Y + Program.MyMap.MinY][X + Program.MyMap.MinX].Add(_index);
+                            CurMap.SpawnedLivingThing[Y + CurMap.MinY][X + CurMap.MinX].Add(_index);
+                            Moved = false;
                             break;
                         case 3:
-                            Program.MyMap.SpawnedLivingThing[Y + Program.MyMap.MinY][X + Program.MyMap.MinX].Remove(_index);
+                            CurMap.SpawnedLivingThing[Y + CurMap.MinY][X + CurMap.MinX].Remove(_index);
                             _y++;
-                            Program.MyMap.SpawnedLivingThing[Y + Program.MyMap.MinY][X + Program.MyMap.MinX].Add(_index);
+                            CurMap.SpawnedLivingThing[Y + CurMap.MinY][X + CurMap.MinX].Add(_index);
+                            Moved = false;
                             break;
                     }
+                }
+
+                _walkCount += _speed;
+                if (_walkCount >= 128)
+                {
+                    switch (TargetDir)
+                    {
+                        case 0:
+                            LastX--;
+                            break;
+                        case 1:
+                            LastY--;
+                            break;
+                        case 2:
+                            LastX++;
+                            break;
+                        case 3:
+                            LastY++;
+                            break;
+                    }
+
+                    _walkCount = 0;
+                    _isWalking = false;
                 }
             }
         }
 
-        public virtual void Action()
+        public virtual void Action(byte hand)
         {
             
         }
 
-
-        public virtual void Draw(RenderWindow rw)
+        public virtual void Draw(RenderWindow rw, int x, int y)
         {
             SFML.Graphics.Sprite s = new SFML.Graphics.Sprite(Program.Data.SpriteBasedOnType(SpriteType.Sprite)[_sprite]);
+            int width = (int)s.Texture.Size.X / 3;
+            int height = (int)s.Texture.Size.Y / 4;
             if (_isWalking)
             {
-                switch (_targetDir)
+                switch (_dir)
                 {
                     case 0:
-                        if (_speed < 6)
+                        if (_speed < 48)
                         {
-                            if (_walkCount < 6)
+                            if (_walkCount < 48)
                                 s.TextureRect = new IntRect(0, (int)s.Texture.Size.Y / 4 * 2, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
-                            else if (_walkCount >= 6 && _walkCount < 11)
+                            else if (_walkCount >= 48 && _walkCount < 88)
                                 s.TextureRect = new IntRect((int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4 * 2, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
-                            else if (_walkCount >= 11 && _walkCount < 16)
+                            else if (_walkCount >= 88 && _walkCount < 128)
                                 s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, (int)s.Texture.Size.Y / 4 * 2, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
                         }
-                        else if (_speed >= 6 && _speed < 8)
+                        else if (_speed >= 48 && _speed < 128)
                         {
-                            if (_walkCount < 8)
+                            if (_walkCount < 128)
                                 s.TextureRect = new IntRect(0, (int)s.Texture.Size.Y / 4 * 2, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
                             else
                                 s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, (int)s.Texture.Size.Y / 4 * 2, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
                         }
-                        else if (_speed >= 8)
+                        else if (_speed >= 128)
                         {
-                            if (_walkCount >= 8)
+                            if (_walkCount >= 128)
                             {
                                 if (_lefted)
                                     s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, (int)s.Texture.Size.Y / 4 * 2, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
@@ -211,25 +287,25 @@ namespace Lost_Soul
                         }
                         break;
                     case 1:
-                        if (_speed < 6)
+                        if (_speed < 48)
                         {
-                            if (_walkCount < 6)
+                            if (_walkCount < 48)
                                 s.TextureRect = new IntRect(0, (int)s.Texture.Size.Y / 4 * 3, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
-                            else if (_walkCount >= 6 && _walkCount < 11)
+                            else if (_walkCount >= 48 && _walkCount < 88)
                                 s.TextureRect = new IntRect((int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4 * 3, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
-                            else if (_walkCount >= 11 && _walkCount < 16)
+                            else if (_walkCount >= 88 && _walkCount < 128)
                                 s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, (int)s.Texture.Size.Y / 4 * 3, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
                         }
-                        else if (_speed >= 6 && _speed < 8)
+                        else if (_speed >= 48 && _speed < 128)
                         {
-                            if (_walkCount < 8)
+                            if (_walkCount < 128)
                                 s.TextureRect = new IntRect(0, (int)s.Texture.Size.Y / 4 * 3, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
                             else
                                 s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, (int)s.Texture.Size.Y / 4 * 3, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
                         }
-                        else if (_speed >= 8)
+                        else if (_speed >= 128)
                         {
-                            if (_walkCount >= 8)
+                            if (_walkCount >= 128)
                             {
                                 if (_lefted)
                                     s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, (int)s.Texture.Size.Y / 4 * 3, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
@@ -239,53 +315,53 @@ namespace Lost_Soul
                         }
                         break;
                     case 2:
-                        if (_speed < 6)
+                        if (_speed < 48)
                         {
-                            if (_walkCount < 6)
-                                s.TextureRect = new IntRect(0, (int)s.Texture.Size.Y / 4 , (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
-                            else if (_walkCount >= 6 && _walkCount < 11)
-                                s.TextureRect = new IntRect((int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4 , (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
-                            else if (_walkCount >= 11 && _walkCount < 16)
-                                s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, (int)s.Texture.Size.Y / 4 , (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                            if (_walkCount < 48)
+                                s.TextureRect = new IntRect(0, (int)s.Texture.Size.Y / 4, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                            else if (_walkCount >= 48 && _walkCount < 88)
+                                s.TextureRect = new IntRect((int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                            else if (_walkCount >= 88 && _walkCount < 128)
+                                s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, (int)s.Texture.Size.Y / 4, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
                         }
-                        else if (_speed >= 6 && _speed < 8)
+                        else if (_speed >= 48 && _speed < 128)
                         {
-                            if (_walkCount < 8)
-                                s.TextureRect = new IntRect(0, (int)s.Texture.Size.Y / 4 , (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                            if (_walkCount < 128)
+                                s.TextureRect = new IntRect(0, (int)s.Texture.Size.Y / 4, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
                             else
-                                s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, (int)s.Texture.Size.Y / 4 , (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                                s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, (int)s.Texture.Size.Y / 4, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
                         }
-                        else if (_speed >= 8)
+                        else if (_speed >= 128)
                         {
-                            if (_walkCount >= 8)
+                            if (_walkCount >= 128)
                             {
                                 if (_lefted)
-                                    s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, (int)s.Texture.Size.Y / 4 , (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                                    s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, (int)s.Texture.Size.Y / 4, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
                                 else
-                                    s.TextureRect = new IntRect(0, (int)s.Texture.Size.Y / 4 , (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                                    s.TextureRect = new IntRect(0, (int)s.Texture.Size.Y / 4, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
                             }
                         }
                         break;
                     case 3:
-                        if (_speed < 6)
+                        if (_speed < 48)
                         {
-                            if (_walkCount < 6)
+                            if (_walkCount < 48)
                                 s.TextureRect = new IntRect(0, 0, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
-                            else if (_walkCount >= 6 && _walkCount < 11)
+                            else if (_walkCount >= 48 && _walkCount < 88)
                                 s.TextureRect = new IntRect((int)s.Texture.Size.X / 3, 0, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
-                            else if (_walkCount >= 11 && _walkCount < 16)
+                            else if (_walkCount >= 88 && _walkCount < 128)
                                 s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, 0, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
                         }
-                        else if (_speed >= 6 && _speed < 8)
+                        else if (_speed >= 48 && _speed < 128)
                         {
-                            if (_walkCount < 8)
+                            if (_walkCount < 128)
                                 s.TextureRect = new IntRect(0, 0, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
                             else
                                 s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, 0, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
                         }
-                        else if (_speed >= 8)
+                        else if (_speed >= 128)
                         {
-                            if (_walkCount >= 8)
+                            if (_walkCount >= 128)
                             {
                                 if (_lefted)
                                     s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, 0, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
@@ -316,7 +392,7 @@ namespace Lost_Soul
             }
             int tempoffsetX = 0;
             int tempoffsetY = 0;
-            switch (_dir)
+            switch (_targetDir)
             {
                 case 0:
                     tempoffsetX = -_walkCount;
@@ -331,8 +407,224 @@ namespace Lost_Soul
                     tempoffsetY = _walkCount;
                     break;
             }
-            s.Position = new Vector2f((_x + Program.MyMap.MinX) * 16 + tempoffsetX, (_y + Program.MyMap.MinY) * 16 - 10 + tempoffsetY);
+
+            s.Position = new Vector2f(x, y);
             rw.Draw(s);
+        }
+
+
+        public virtual void Draw(RenderWindow rw)
+        {
+            SFML.Graphics.Sprite s = new SFML.Graphics.Sprite(Program.Data.SpriteBasedOnType(SpriteType.Sprite)[_sprite]);
+            int width = (int)s.Texture.Size.X / 3;
+            int height = (int)s.Texture.Size.Y / 4;
+            if (_isWalking)
+            {
+                switch (_dir)
+                {
+                    case 0:
+                        if (_speed < 48)
+                        {
+                            if (_walkCount < 48)
+                                s.TextureRect = new IntRect(0, (int)s.Texture.Size.Y / 4 * 2, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                            else if (_walkCount >= 48 && _walkCount < 88)
+                                s.TextureRect = new IntRect((int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4 * 2, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                            else if (_walkCount >= 88 && _walkCount < 128)
+                                s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, (int)s.Texture.Size.Y / 4 * 2, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                        }
+                        else if (_speed >= 48 && _speed < 128)
+                        {
+                            if (_walkCount < 128)
+                                s.TextureRect = new IntRect(0, (int)s.Texture.Size.Y / 4 * 2, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                            else
+                                s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, (int)s.Texture.Size.Y / 4 * 2, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                        }
+                        else if (_speed >= 128)
+                        {
+                            if (_walkCount >= 128)
+                            {
+                                if (_lefted)
+                                    s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, (int)s.Texture.Size.Y / 4 * 2, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                                else
+                                    s.TextureRect = new IntRect(0, (int)s.Texture.Size.Y / 4 * 2, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                            }
+                        }
+                        break;
+                    case 1:
+                        if (_speed < 48)
+                        {
+                            if (_walkCount < 48)
+                                s.TextureRect = new IntRect(0, (int)s.Texture.Size.Y / 4 * 3, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                            else if (_walkCount >= 48 && _walkCount < 88)
+                                s.TextureRect = new IntRect((int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4 * 3, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                            else if (_walkCount >= 88 && _walkCount < 128)
+                                s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, (int)s.Texture.Size.Y / 4 * 3, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                        }
+                        else if (_speed >= 48 && _speed < 128)
+                        {
+                            if (_walkCount < 128)
+                                s.TextureRect = new IntRect(0, (int)s.Texture.Size.Y / 4 * 3, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                            else
+                                s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, (int)s.Texture.Size.Y / 4 * 3, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                        }
+                        else if (_speed >= 128)
+                        {
+                            if (_walkCount >= 128)
+                            {
+                                if (_lefted)
+                                    s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, (int)s.Texture.Size.Y / 4 * 3, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                                else
+                                    s.TextureRect = new IntRect(0, (int)s.Texture.Size.Y / 4 * 3, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                            }
+                        }
+                        break;
+                    case 2:
+                        if (_speed < 48)
+                        {
+                            if (_walkCount < 48)
+                                s.TextureRect = new IntRect(0, (int)s.Texture.Size.Y / 4 , (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                            else if (_walkCount >= 48 && _walkCount < 88)
+                                s.TextureRect = new IntRect((int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4 , (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                            else if (_walkCount >= 88 && _walkCount < 128)
+                                s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, (int)s.Texture.Size.Y / 4 , (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                        }
+                        else if (_speed >= 48 && _speed < 128)
+                        {
+                            if (_walkCount < 128)
+                                s.TextureRect = new IntRect(0, (int)s.Texture.Size.Y / 4 , (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                            else
+                                s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, (int)s.Texture.Size.Y / 4 , (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                        }
+                        else if (_speed >= 128)
+                        {
+                            if (_walkCount >= 128)
+                            {
+                                if (_lefted)
+                                    s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, (int)s.Texture.Size.Y / 4 , (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                                else
+                                    s.TextureRect = new IntRect(0, (int)s.Texture.Size.Y / 4 , (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                            }
+                        }
+                        break;
+                    case 3:
+                        if (_speed < 48)
+                        {
+                            if (_walkCount < 48)
+                                s.TextureRect = new IntRect(0, 0, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                            else if (_walkCount >= 48 && _walkCount < 88)
+                                s.TextureRect = new IntRect((int)s.Texture.Size.X / 3, 0, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                            else if (_walkCount >= 88 && _walkCount < 128)
+                                s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, 0, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                        }
+                        else if (_speed >= 48 && _speed < 128)
+                        {
+                            if (_walkCount < 128)
+                                s.TextureRect = new IntRect(0, 0, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                            else
+                                s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, 0, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                        }
+                        else if (_speed >= 128)
+                        {
+                            if (_walkCount >= 128)
+                            {
+                                if (_lefted)
+                                    s.TextureRect = new IntRect((int)s.Texture.Size.X / 3 * 2, 0, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                                else
+                                    s.TextureRect = new IntRect(0, 0, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                            }
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                switch (_dir)
+                {
+                    case 0:
+                        s.TextureRect = new IntRect((int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4 * 2, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                        break;
+                    case 1:
+                        s.TextureRect = new IntRect((int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4 * 3, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                        break;
+                    case 2:
+                        s.TextureRect = new IntRect((int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                        break;
+                    case 3:
+                        s.TextureRect = new IntRect((int)s.Texture.Size.X / 3, 0, (int)s.Texture.Size.X / 3, (int)s.Texture.Size.Y / 4);
+                        break;
+                }
+            }
+            int tempoffsetX = 0;
+            int tempoffsetY = 0;
+            switch (_targetDir)
+            {
+                case 0:
+                    tempoffsetX = -_walkCount;
+                    break;
+                case 1:
+                    tempoffsetY = -_walkCount;
+                    break;
+                case 2:
+                    tempoffsetX = _walkCount;
+                    break;
+                case 3:
+                    tempoffsetY = _walkCount;
+                    break;
+            }
+            
+            s.Position = new Vector2f((LastX + CurMap.MinX) * 16 + tempoffsetX / 8, (LastY + CurMap.MinY) * 16 - 10 + tempoffsetY / 8);
+            rw.Draw(s);
+
+            //Draw minihud
+            
+            s = new SFML.Graphics.Sprite(Program.Data.SpriteBasedOnType(SpriteType.SmallHUD)[0]);
+            s.TextureRect = new IntRect(0, 0, 1, 1);
+            for (int i = 1; i < 3; i++)
+            {
+                s.Position = new Vector2f((LastX + CurMap.MinX) * 16 + tempoffsetX / 8, (LastY + CurMap.MinY) * 16 - 10 + tempoffsetY / 8 - height / 2 + 8 + i);
+                rw.Draw(s);
+                s.Position = new Vector2f((LastX + CurMap.MinX) * 16 + tempoffsetX / 8 + width, (LastY + CurMap.MinY) * 16 - 10 + tempoffsetY / 8 - height / 2 + 8 + i);
+                rw.Draw(s);
+            }
+            for (int i = 0; i < width + 1; i++)
+            {
+                s.Position = new Vector2f((LastX + CurMap.MinX) * 16 + tempoffsetX / 8 + i, (LastY + CurMap.MinY) * 16 - 10 + tempoffsetY / 8 - height / 2 + 8);
+                rw.Draw(s);
+                s.Position = new Vector2f((LastX + CurMap.MinX) * 16 + tempoffsetX / 8 + i, (LastY + CurMap.MinY) * 16 - 10 + tempoffsetY / 8 - height / 2 + 10);
+                rw.Draw(s);
+            }
+            //find health percentage
+            int percentage = _curHP * 100 / MaxHealth;
+            for (int i = 1; i < width; i++)
+            {
+                if (i * 100 / (width - 1) > percentage)
+                    s.TextureRect = new IntRect(2, 0, 1, 1);
+                else
+                    s.TextureRect = new IntRect(1, 0, 1, 1);
+                s.Position = new Vector2f((LastX + CurMap.MinX) * 16 + tempoffsetX / 8 + i - 8, (LastY + CurMap.MinY) * 16 - 10 + tempoffsetY / 8 - height / 2 - 8);
+                rw.Draw(s);
+            }
+
+        }
+
+        public void ReceiveDamage(int damage, LivingObject caster)
+        {
+            if (Targeting == null)
+                Targeting = caster;
+            if (CurrentDefenseAction != null)
+            {
+                damage -= (int)(CurrentDefenseAction.ID.BaseDamage * ((float)Logic.RandomizeDamage() / 10));
+                if (damage < 0)
+                    damage = 0;
+            }
+            _curHP -= damage;
+            CurMap.MiniText.Add(new MiniText(damage + "", 10, (X + CurMap.MinX) * Program.Data.TileSizeX, (Y + CurMap.MinY) * Program.Data.TileSizeY - 18, 60, Color.Red, true, 0.4f));
+        }
+
+        public bool Lefted
+        {
+            get { return _lefted; }
+            set { _lefted = value; }
         }
 
         public string Name
@@ -456,6 +748,16 @@ namespace Lost_Soul
             set { _level = value; }
         }
 
+        public bool Moved { get; set; }
         public List<int> PathfindingPath{ get; set; }
+        public int LastX { get; set; }
+        public int LastY { get; set; }
+        public int SideMapID { get; set; }
+        public Map CurMap { get; set; }
+        public LivingObject Targeting { get; set; }
+        public int LeftAttackCooldown { get; set; }
+        public int RightAttackCooldown { get; set; }
+        public int AttackSpeed { get; set; }
+        public AttackAction CurrentDefenseAction { get; set; }
     }
 }

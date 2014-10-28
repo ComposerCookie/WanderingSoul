@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6AB1A933-C3A5-4593-A474-333244D326A6}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Lost_Soul</RootNamespace>
+    <AssemblyName>Wandering Soul</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="sfmlnet-audio-2">
+      <HintPath>..\..\SFML C#\SFML.Net-2.1-32bits\SFML.Net-2.1\lib\sfmlnet-audio-2.dll</HintPath>
+    </Reference>
+    <Reference Include="sfmlnet-graphics-2">
+      <HintPath>..\..\SFML C#\SFML.Net-2.1-32bits\SFML.Net-2.1\lib\sfmlnet-graphics-2.dll</HintPath>
+    </Reference>
+    <Reference Include="sfmlnet-window-2">
+      <HintPath>..\..\SFML C#\SFML.Net-2.1-32bits\SFML.Net-2.1\lib\sfmlnet-window-2.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="csfml-audio-2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="csfml-graphics-2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="csfml-window-2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="libsndfile-1.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="openal32.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ActionButton.cs" />
+    <Compile Include="ActionGUI.cs" />
+    <Compile Include="ActionGUIBuildButton.cs" />
+    <Compile Include="ActionGUICraftButton.cs" />
+    <Compile Include="ActionGUILeftArrowButton.cs" />
+    <Compile Include="ActionGUIRightArrowButton.cs" />
+    <Compile Include="Attack.cs" />
+    <Compile Include="Buildable.cs" />
+    <Compile Include="BuildFire.cs" />
+    <Compile Include="BuildGUI.cs" />
+    <Compile Include="BuildGUIArrowLeftButton.cs" />
+    <Compile Include="BuildGUIArrowRightButton.cs" />
+    <Compile Include="BuildGUIClassLeftButton.cs" />
+    <Compile Include="BuildGUIClassRightButton.cs" />
+    <Compile Include="BuildGUIPickArrowUp.cs" />
+    <Compile Include="BuildGUIOkButton.cs" />
+    <Compile Include="BuildGUIPickArrowDown.cs" />
+    <Compile Include="BuildGUISquareClassButton.cs" />
+    <Compile Include="BuildGUISquareItemButton.cs" />
+    <Compile Include="BuildGUISquarePickButton.cs" />
+    <Compile Include="BuildingClassificationType.cs" />
+    <Compile Include="ConstructionGUI.cs" />
+    <Compile Include="ConstructionGUIBuildButton.cs" />
+    <Compile Include="Core Engine\Map\MainMap.cs" />
+    <Compile Include="Core Engine\Map\MapGenerator.cs" />
+    <Compile Include="Core Engine\Map\RowTile.cs" />
+    <Compile Include="Core Engine\Map\TerrainSizeEnum.cs" />
+    <Compile Include="Core Engine\Map\TerrainTypeEnum.cs" />
+    <Compile Include="Core Engine\People\NPC.cs" />
+    <Compile Include="Core Engine\Player\Party.cs" />
+    <Compile Include="Core Engine\Player\PlayerData.cs" />
+    <Compile Include="Data\Data.cs" />
+    <Compile Include="Core Engine\People\LivingObject.cs" />
+    <Compile Include="DropGUI.cs" />
+    <Compile Include="DropGUISlotButton.cs" />
+    <Compile Include="DropPickUpAllButton.cs" />
+    <Compile Include="Environment\Spawnable.cs" />
+    <Compile Include="Core Engine\People\LivingObjectType.cs" />
+    <Compile Include="Core Engine\State\GameState.cs" />
+    <Compile Include="Core Engine\State\InGameState.cs" />
+    <Compile Include="GUI\In Game\Equipment\EquipmentButton.cs" />
+    <Compile Include="GUI\In Game\Equipment\EquipmentGUI.cs" />
+    <Compile Include="GUI\In Game\Equipment\EquipmentSlot.cs" />
+    <Compile Include="Core Engine\People\GeneralBehaviorType.cs" />
+    <Compile Include="GUI\GUIClose.cs" />
+    <Compile Include="GUI\GUIHead.cs" />
+    <Compile Include="GUI\Main Menu\Button\ExitGameButton.cs" />
+    <Compile Include="GUI\GUI.cs" />
+    <Compile Include="GUI\GUIButton.cs" />
+    <Compile Include="GUI\In Game\InGameGUI.cs" />
+    <Compile Include="GUI\In Game\Inventory\Button\InventoryButton.cs" />
+    <Compile Include="GUI\In Game\Inventory\InventoryGUI.cs" />
+    <Compile Include="GUI\In Game\Inventory\Button\InventorySlotButton.cs" />
+    <Compile Include="Core Engine\People\Hostile.cs" />
+    <Compile Include="GUI\HUD\HUD.cs" />
+    <Compile Include="GUI\HUD\HUDExperienceBar.cs" />
+    <Compile Include="GUI\HUD\HUDHealthBar.cs" />
+    <Compile Include="GUI\HUD\HUDManaBar.cs" />
+    <Compile Include="GUI\In Game\In Game Log\InGameLog.cs" />
+    <Compile Include="GUI\In Game\In Game Log\InGameLogArrowDown.cs" />
+    <Compile Include="GUI\In Game\In Game Log\InGameLogArrowUp.cs" />
+    <Compile Include="GUI\In Game\In Game Log\InGameLogClose.cs" />
+    <Compile Include="GUI\In Game\In Game Log\InGameLogGUI.cs" />
+    <Compile Include="GUI\In Game\In Game Log\InGameLogMessage.cs" />
+    <Compile Include="GUI\In Game\In Game Log\InGameLogMessageType.cs" />
+    <Compile Include="GUI\In Game\In Game Log\InGameLogOpen.cs" />
+    <Compile Include="GUI\In Game\In Game Log\InGameLogReturn.cs" />
+    <Compile Include="GUI\In Game\Inventory\Button\InventoryDestroyButton.cs" />
+    <Compile Include="GUI\In Game\Inventory\Button\InventoryDropAllButton.cs" />
+    <Compile Include="GUI\In Game\Inventory\Button\InventoryQuickCraftButton.cs" />
+    <Compile Include="Items\Items.cs" />
+    <Compile Include="Items\ItemType.cs" />
+    <Compile Include="JobType.cs" />
+    <Compile Include="Logic.cs" />
+    <Compile Include="Core Engine\Map\MapType.cs" />
+    <Compile Include="Core Engine\Player\PlayerParty.cs" />
+    <Compile Include="Core Engine\State\MainMenuState.cs" />
+    <Compile Include="GUI\Main Menu\MainMenuGUI.cs" />
+    <Compile Include="GUI\Main Menu\Button\NewGameButton.cs" />
+    <Compile Include="Core Engine\People\PartyBehaviorType.cs" />
+    <Compile Include="Map.cs" />
+    <Compile Include="MouseStateType.cs" />
+    <Compile Include="PossiblePath.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Core Engine\Map\Terrain.cs" />
+    <Compile Include="Core Engine\Map\TerrainData.cs" />
+    <Compile Include="Core Engine\Map\Tile.cs" />
+    <Compile Include="Core Engine\Map\TileData.cs" />
+    <Compile Include="Core Engine\Graphic\Sprite.cs" />
+    <Compile Include="Core Engine\Graphic\SpriteType.cs" />
+    <Compile Include="Environment\Resource.cs" />
+    <Compile Include="Items\ResourceItem.cs" />
+    <Compile Include="Items\SpawnItems.cs" />
+    <Compile Include="RightClickBuildButton.cs" />
+    <Compile Include="RightClickButton.cs" />
+    <Compile Include="RightClickCastButton.cs" />
+    <Compile Include="RightClickExamineButton.cs" />
+    <Compile Include="RightClickGUI.cs" />
+    <Compile Include="RightClickPickButton.cs" />
+    <Compile Include="RightClickTalkButton.cs" />
+    <Compile Include="RightClickThrowButton.cs" />
+    <Compile Include="RightClickWalk.cs" />
+    <Compile Include="RightClickWalkAttack.cs" />
+    <Compile Include="RightClickWalkHarvest.cs" />
+    <Compile Include="SideMap.cs" />
+    <Compile Include="SpawnableTypes.cs" />
+    <Compile Include="SpawnBuildable.cs" />
+    <Compile Include="SpawnNPC.cs" />
+    <Compile Include="Environment\SpawnSpawnable.cs" />
+    <Compile Include="SpawnResource.cs" />
+    <Compile Include="Items\ToolItem.cs" />
+    <Compile Include="Items\ToolType.cs" />
+    <Compile Include="TreeResource.cs" />
+    <Compile Include="Items\WeaponItem.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

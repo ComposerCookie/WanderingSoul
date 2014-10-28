@@ -25,11 +25,11 @@ namespace Lost_Soul
         {
             if (Mouse.IsButtonPressed(Mouse.Button.Left))
             {
-                for (int i = 0; i < Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].Inventory.Count; i++)
+                for (int i = 0; i < Logic.CurrentParty.MainParty.MyParty[0].Inventory.Count; i++)
                 {
-                    if (Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].Inventory[i] != null)
+                    if (Logic.CurrentParty.MainParty.MyParty[0].Inventory[i] != null)
                     {
-                        Program.Data.MyPlayerData[Program.CurrentSaveData].MainParty.MyParty[0].DropItemFromInventory(i);
+                        Logic.CurrentParty.MainParty.MyParty[0].DropItemFromInventory(i);
                     }
                 }
             }

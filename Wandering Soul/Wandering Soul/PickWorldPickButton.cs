@@ -1,0 +1,67 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using SFML.Graphics;
+using SFML.Window;
+
+namespace Lost_Soul
+{
+    public class PickWorldPickButton : GUIButton
+    {
+        RenderWindow _screen;
+        public PickWorldPickButton(RenderWindow rw, int id, int x, int y)
+        {
+            _screen = rw;
+            ID = id;
+            X = x;
+            Y = y;
+        }
+        public void Clicked()
+        {
+        }
+        public void Picked()
+        {
+            //Logic.MainMap = Program.Generator.NewMap();
+            PickWorldGUI g = (PickWorldGUI)Program.SM.States[0].GameGUI[5];
+            if (Mouse.IsButtonPressed(Mouse.Button.Left))
+            {
+                if (Program.Data.MyPlayerData.Count > 0)
+                {
+                    if (g.SelectedWorld < Program.Data.MyWorldData.Count)
+                    {
+                        Logic.CurrentWorld = Program.Data.MyWorldData[g.SelectedWorld];
+                        
+
+                        Program.SM.States[0].GameGUI[5].Visibility = false;
+                        Program.SM.States[0].GameGUI[0].Visibility = true;
+                        Program.SM.SwitchState(StateType.InGame);
+                    }
+                }
+            }
+        }
+        public bool isMouseHover()
+        {
+            return false;
+        }
+        public void Draw()
+        {
+            SFML.Graphics.Sprite s = new SFML.Graphics.Sprite(Program.Data.SpriteBasedOnType(SpriteType.Button)[ID]);
+            s.Position = new Vector2f(X, Y);
+            _screen.Draw(s);
+        }
+        public void Update()
+        {
+        }
+        public bool isFocused()
+        {
+            return false;
+        }
+        public int ID { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public bool Visibility { get; set; }
+    }
+}
