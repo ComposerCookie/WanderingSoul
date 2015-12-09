@@ -16,8 +16,6 @@ namespace Lost_Soul
             _screen = rw;
         }
 
-        public Object MouseHolding { get; set; }
-
         public void Initialize()
         {
             GameGUI = new List<GUI>();
@@ -26,8 +24,8 @@ namespace Lost_Soul
             GameGUI.Add(new EquipmentGUI(_screen, 3));
             GameGUI.Add(new HUD(_screen, 4));
             GameGUI.Add(new InGameLogGUI(_screen, 5));
-            GameGUI.Add(new DropGUI(_screen, 6, Program.Data.CurrentParty.MainParty.MyParty[0].X + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX, Program.Data.CurrentParty.MainParty.MyParty[0].Y + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY));
-            GameGUI.Add(new RightClickGUI(_screen, Mouse.GetPosition(_screen).X, Mouse.GetPosition(_screen).Y, (int)(Mouse.GetPosition(_screen).X / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].X - _screen.Size.X / 2 / 16 - 1), (int)((Mouse.GetPosition(_screen).Y + 8) / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].Y - _screen.Size.Y / 2 / 16 - 1)));
+            GameGUI.Add(new DropGUI(_screen, 6, Logic.CurrentParty.MainParty.MyParty[0].X + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX, Logic.CurrentParty.MainParty.MyParty[0].Y + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY));
+            GameGUI.Add(new RightClickGUI(_screen, Mouse.GetPosition(_screen).X, Mouse.GetPosition(_screen).Y, (int)(Mouse.GetPosition(_screen).X / 16 + Logic.CurrentParty.MainParty.MyParty[0].X - _screen.Size.X / 2 / 16 - 1), (int)((Mouse.GetPosition(_screen).Y + 8) / 16 + Logic.CurrentParty.MainParty.MyParty[0].Y - _screen.Size.Y / 2 / 16 - 1)));
             GameGUI.Add(new ActionGUI(_screen, 7));
             GameGUI.Add(new BuildGUI(_screen, 8));
             GameGUI.Add(new ConstructionGUI(_screen, 9, 0, 0));
@@ -40,22 +38,30 @@ namespace Lost_Soul
             ClickState = -1;
         }
 
+        
+
         public void HandleResize()
         {
             
         }
 
+        public int SaveFile
+        {
+            get { return Program.CurrentSaveData; }
+            set { Program.CurrentSaveData = value; }
+        }
+
         public void Draw()
         {
-            Program.Data.CurrentParty.MainParty.MyParty[0].SetViewToThisNPC(_screen);
-            Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.DrawMap(_screen);
-            Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.DrawSpawnBot(_screen);
-            Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.DrawNPC(_screen);
-            int tempx = Program.Data.CurrentParty.MainParty.MyParty[0].LastX; int tempy = Program.Data.CurrentParty.MainParty.MyParty[0].LastY;
+            Logic.CurrentParty.MainParty.MyParty[0].SetViewToThisNPC(_screen);
+            Logic.CurrentParty.MainParty.MyParty[0].CurMap.DrawMap(_screen);
+            Logic.CurrentParty.MainParty.MyParty[0].CurMap.DrawSpawnBot(_screen);
+            Logic.CurrentParty.MainParty.MyParty[0].CurMap.DrawNPC(_screen);
+            int tempx = Logic.CurrentParty.MainParty.MyParty[0].LastX; int tempy = Logic.CurrentParty.MainParty.MyParty[0].LastY;
 
-            for (int i = Program.Data.CurrentParty.MainParty.MyParty[0].PathfindingPath.Count - 1; i >= 0; i--)
+            for (int i = Logic.CurrentParty.MainParty.MyParty[0].PathfindingPath.Count - 1; i >= 0; i--)
             {
-                switch (Program.Data.CurrentParty.MainParty.MyParty[0].PathfindingPath[i])
+                switch (Logic.CurrentParty.MainParty.MyParty[0].PathfindingPath[i])
                 {
                     case 0:
                         tempx--;
@@ -70,29 +76,29 @@ namespace Lost_Soul
                         tempy++;
                         break;
                 }
-                _rect.Position = new Vector2f((tempx + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX) * 16, (tempy + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY) * 16);
+                _rect.Position = new Vector2f((tempx + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX) * 16, (tempy + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY) * 16);
                 _screen.Draw(_rect);
 
             }
 
-            Program.Data.CurrentParty.MainParty.MyParty[0].Draw(_screen);
-            Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.DrawSpawnFringe(_screen);
+            Logic.CurrentParty.MainParty.MyParty[0].Draw(_screen);
+            Logic.CurrentParty.MainParty.MyParty[0].CurMap.DrawSpawnFringe(_screen);
 
             _screen.SetView(new View(new FloatRect(0, 0, _screen.Size.X, _screen.Size.Y)));
             _rect.Position = new Vector2f(Mouse.GetPosition(_screen).X / 16 * 16, (Mouse.GetPosition(_screen).Y - 8) / 16 * 16 + 8);
             _screen.Draw(_rect);
 
-            Program.Data.CurrentParty.MainParty.MyParty[0].SetViewToThisNPC(_screen);
+            Logic.CurrentParty.MainParty.MyParty[0].SetViewToThisNPC(_screen);
             switch (ClickState)
             {
                 case 0:
                     SpawnBuildable b = new SpawnBuildable(CurrentObjectIndex, -1, -1);
                     bool block = false;
-                    for (int r = (int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1 + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY; r < (int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1 + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY + Program.Data.GetBuildableList()[CurrentObjectIndex].SizeY; r++)
+                    for (int r = (int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Logic.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1 + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY; r < (int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Logic.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1 + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY + Program.Data.GetBuildableList()[CurrentObjectIndex].SizeY; r++)
                     {
-                        for (int c = (int)Mouse.GetPosition(_screen).X / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1 + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX; c < (int)Mouse.GetPosition(_screen).X / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1 + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX + Program.Data.GetBuildableList()[CurrentObjectIndex].SizeX; c++)
+                        for (int c = (int)Mouse.GetPosition(_screen).X / 16 + Logic.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1 + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX; c < (int)Mouse.GetPosition(_screen).X / 16 + Logic.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1 + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX + Program.Data.GetBuildableList()[CurrentObjectIndex].SizeX; c++)
                         {
-                            if (Logic.BlockedAt(c, r, Program.Data.CurrentParty.MainParty.MyParty[0].CurMap, 1))
+                            if (Logic.BlockedAt(c, r, Logic.CurrentParty.MainParty.MyParty[0].CurMap, 1))
                             {
                                 block = true;
                                 break;
@@ -101,13 +107,13 @@ namespace Lost_Soul
                     }
                     if (block)
                     {
-                        b.DrawBot(_screen, (int)Mouse.GetPosition(_screen).X / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1, (int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1, true);
-                        b.DrawTop(_screen, (int)Mouse.GetPosition(_screen).X / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1, (int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1, true);
+                        b.DrawBot(_screen, (int)Mouse.GetPosition(_screen).X / 16 + Logic.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1, (int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Logic.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1, true);
+                        b.DrawTop(_screen, (int)Mouse.GetPosition(_screen).X / 16 + Logic.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1, (int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Logic.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1, true);
                     }
                     else
                     {
-                        b.DrawBot(_screen, (int)Mouse.GetPosition(_screen).X / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1, (int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1, false);
-                        b.DrawTop(_screen, (int)Mouse.GetPosition(_screen).X / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1, (int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1, false);
+                        b.DrawBot(_screen, (int)Mouse.GetPosition(_screen).X / 16 + Logic.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1, (int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Logic.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1, false);
+                        b.DrawTop(_screen, (int)Mouse.GetPosition(_screen).X / 16 + Logic.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1, (int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Logic.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1, false);
                     }
                     break;
                 default:
@@ -123,28 +129,28 @@ namespace Lost_Soul
             if (!GameGUI[4].Visibility)
                 GameGUI[4].MyButton[5].Draw();
                 
-            Program.Data.CurrentParty.MainParty.MyParty[0].SetViewToThisNPC(_screen);
-            Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.DrawAnimation(_screen);
-            Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.DrawMiniText(_screen);
+            Logic.CurrentParty.MainParty.MyParty[0].SetViewToThisNPC(_screen);
+            Logic.CurrentParty.MainParty.MyParty[0].CurMap.DrawAnimation(_screen);
+            Logic.CurrentParty.MainParty.MyParty[0].CurMap.DrawMiniText(_screen);
         }
 
         public void Update()
         {
-            Program.Data.CurrentParty.MainParty.MyParty[0].SpawnMoreMapDueToThisNPC();
-            Program.Data.CurrentParty.MainParty.MyParty[0].Update();
+            Logic.CurrentParty.MainParty.MyParty[0].SpawnMoreMapDueToThisNPC();
+            Logic.CurrentParty.MainParty.MyParty[0].Update();
 
-            //foreach (LivingObject Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.LivingThing[i] in Program.Data.MyLivingObject)
-            for (int i = Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.LivingThing.Count - 1; i >= 0; i--)
+            //foreach (LivingObject Logic.CurrentParty.MainParty.MyParty[0].CurMap.LivingThing[i] in Program.Data.MyLivingObject)
+            for (int i = Logic.CurrentParty.MainParty.MyParty[0].CurMap.LivingThing.Count - 1; i >= 0; i--)
             {
-                if (Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.LivingThing[i] == null)
+                if (Logic.CurrentParty.MainParty.MyParty[0].CurMap.LivingThing[i] == null)
                     continue;
-                if (Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.LivingThing[i].X + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX < Program.Data.CurrentParty.MainParty.MyParty[0].X + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX + 33 && Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.LivingThing[i].X + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX > Program.Data.CurrentParty.MainParty.MyParty[0].X + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX - 34 && Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.LivingThing[i].Y + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY < Program.Data.CurrentParty.MainParty.MyParty[0].Y + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY + 25 && Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.LivingThing[i].Y + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY > Program.Data.CurrentParty.MainParty.MyParty[0].Y + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY - 26)
+                if (Logic.CurrentParty.MainParty.MyParty[0].CurMap.LivingThing[i].X + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX < Logic.CurrentParty.MainParty.MyParty[0].X + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX + 33 && Logic.CurrentParty.MainParty.MyParty[0].CurMap.LivingThing[i].X + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX > Logic.CurrentParty.MainParty.MyParty[0].X + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX - 34 && Logic.CurrentParty.MainParty.MyParty[0].CurMap.LivingThing[i].Y + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY < Logic.CurrentParty.MainParty.MyParty[0].Y + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY + 25 && Logic.CurrentParty.MainParty.MyParty[0].CurMap.LivingThing[i].Y + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY > Logic.CurrentParty.MainParty.MyParty[0].Y + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY - 26)
                 {
-                    Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.LivingThing[i].Update();
+                    Logic.CurrentParty.MainParty.MyParty[0].CurMap.LivingThing[i].Update();
                 }
             }
 
-            Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.Update();
+            Logic.CurrentParty.MainParty.MyParty[0].CurMap.Update();
         }
 
         public void HandleKey(Keyboard.Key key)
@@ -152,15 +158,15 @@ namespace Lost_Soul
             bool noitem;
             ConstructionGUI gc = (ConstructionGUI)GameGUI[9];
             SpawnBuildable sb = null;
-            if (Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX] > -1)
+            if (Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX] > -1)
             {
-                if (Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX]] is SpawnBuildable)
-                    sb = (SpawnBuildable)Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX]];
+                if (Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX]] is SpawnBuildable)
+                    sb = (SpawnBuildable)Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX]];
             }
             switch (key)
             {
                 case Keyboard.Key.Up:
-                    Program.Data.CurrentParty.MainParty.MyParty[0].CurrentAction = 0;
+                    Logic.CurrentParty.MainParty.MyParty[0].CurrentAction = 0;
                     noitem = true;
                     if (sb != null)
                     {
@@ -172,17 +178,17 @@ namespace Lost_Soul
                         }
                         if (noitem)
                         {
-                            Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX]] = null;
-                            Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX] = -1;
+                            Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX]] = null;
+                            Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX] = -1;
                         }
                     }
                     GameGUI[9].Visibility = false;
-                    Program.Data.CurrentParty.MainParty.MyParty[0].PathfindingPath.Clear();
-                    Program.Data.CurrentParty.MainParty.MyParty[0].GeneralBehavior = (int)GeneralBehaviorType.Normal;
+                    Logic.CurrentParty.MainParty.MyParty[0].PathfindingPath.Clear();
+                    Logic.CurrentParty.MainParty.MyParty[0].GeneralBehavior = (int)GeneralBehaviorType.Normal;
                     if (Keyboard.IsKeyPressed(Keyboard.Key.LControl))
-                        Program.Data.CurrentParty.MainParty.MyParty[0].Walk(1, false);
+                        Logic.CurrentParty.MainParty.MyParty[0].Walk(1, false);
                     else
-                        Program.Data.CurrentParty.MainParty.MyParty[0].Walk(1, true);
+                        Logic.CurrentParty.MainParty.MyParty[0].Walk(1, true);
                     if (Program.UsingButton is DropGUISlotButton)
                     {
                         DropGUISlotButton b = (DropGUISlotButton)Program.UsingButton;
@@ -192,7 +198,7 @@ namespace Lost_Soul
                     }
                     break;
                 case Keyboard.Key.Down:
-                    Program.Data.CurrentParty.MainParty.MyParty[0].CurrentAction = 0;
+                    Logic.CurrentParty.MainParty.MyParty[0].CurrentAction = 0;
                     noitem = true;
                     if (sb != null)
                     {
@@ -204,17 +210,17 @@ namespace Lost_Soul
 
                         if (noitem)
                         {
-                            Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX]] = null;
-                            Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX] = -1;
+                            Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX]] = null;
+                            Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX] = -1;
                         }
                     }
                     GameGUI[9].Visibility = false;
-                    Program.Data.CurrentParty.MainParty.MyParty[0].PathfindingPath.Clear();
-                    Program.Data.CurrentParty.MainParty.MyParty[0].GeneralBehavior = (int)GeneralBehaviorType.Normal;
+                    Logic.CurrentParty.MainParty.MyParty[0].PathfindingPath.Clear();
+                    Logic.CurrentParty.MainParty.MyParty[0].GeneralBehavior = (int)GeneralBehaviorType.Normal;
                     if (Keyboard.IsKeyPressed(Keyboard.Key.LControl))
-                        Program.Data.CurrentParty.MainParty.MyParty[0].Walk(3, false);
+                        Logic.CurrentParty.MainParty.MyParty[0].Walk(3, false);
                     else
-                        Program.Data.CurrentParty.MainParty.MyParty[0].Walk(3, true);
+                        Logic.CurrentParty.MainParty.MyParty[0].Walk(3, true);
                     if (Program.UsingButton is DropGUISlotButton)
                     {
                         DropGUISlotButton b = (DropGUISlotButton)Program.UsingButton;
@@ -224,7 +230,7 @@ namespace Lost_Soul
                     }
                     break;
                 case Keyboard.Key.Left:
-                    Program.Data.CurrentParty.MainParty.MyParty[0].CurrentAction = 0;
+                    Logic.CurrentParty.MainParty.MyParty[0].CurrentAction = 0;
                     noitem = true;
                     if (sb != null)
                     {
@@ -236,17 +242,17 @@ namespace Lost_Soul
 
                         if (noitem)
                         {
-                            Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX]] = null;
-                            Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX] = -1;
+                            Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX]] = null;
+                            Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX] = -1;
                         }
                     }
                     GameGUI[9].Visibility = false;
-                    Program.Data.CurrentParty.MainParty.MyParty[0].PathfindingPath.Clear();
-                    Program.Data.CurrentParty.MainParty.MyParty[0].GeneralBehavior = (int)GeneralBehaviorType.Normal;
+                    Logic.CurrentParty.MainParty.MyParty[0].PathfindingPath.Clear();
+                    Logic.CurrentParty.MainParty.MyParty[0].GeneralBehavior = (int)GeneralBehaviorType.Normal;
                     if (Keyboard.IsKeyPressed(Keyboard.Key.LControl))
-                        Program.Data.CurrentParty.MainParty.MyParty[0].Walk(0, false);
+                        Logic.CurrentParty.MainParty.MyParty[0].Walk(0, false);
                     else
-                        Program.Data.CurrentParty.MainParty.MyParty[0].Walk(0, true);
+                        Logic.CurrentParty.MainParty.MyParty[0].Walk(0, true);
                     if (Program.UsingButton is DropGUISlotButton)
                     {
                         DropGUISlotButton b = (DropGUISlotButton)Program.UsingButton;
@@ -256,7 +262,7 @@ namespace Lost_Soul
                     }
                     break;
                 case Keyboard.Key.Right:
-                    Program.Data.CurrentParty.MainParty.MyParty[0].CurrentAction = 0;
+                    Logic.CurrentParty.MainParty.MyParty[0].CurrentAction = 0;
                     noitem = true;
                     if (sb != null)
                     {
@@ -268,17 +274,17 @@ namespace Lost_Soul
 
                         if (noitem)
                         {
-                            Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX]] = null;
-                            Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX] = -1;
+                            Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX]] = null;
+                            Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX] = -1;
                         }
                     }
                     GameGUI[9].Visibility = false;
-                    Program.Data.CurrentParty.MainParty.MyParty[0].PathfindingPath.Clear();
-                    Program.Data.CurrentParty.MainParty.MyParty[0].GeneralBehavior = (int)GeneralBehaviorType.Normal;
+                    Logic.CurrentParty.MainParty.MyParty[0].PathfindingPath.Clear();
+                    Logic.CurrentParty.MainParty.MyParty[0].GeneralBehavior = (int)GeneralBehaviorType.Normal;
                     if (Keyboard.IsKeyPressed(Keyboard.Key.LControl))
-                        Program.Data.CurrentParty.MainParty.MyParty[0].Walk(2, false);
+                        Logic.CurrentParty.MainParty.MyParty[0].Walk(2, false);
                     else
-                        Program.Data.CurrentParty.MainParty.MyParty[0].Walk(2, true);
+                        Logic.CurrentParty.MainParty.MyParty[0].Walk(2, true);
                     if (Program.UsingButton is DropGUISlotButton)
                     {
                         DropGUISlotButton b = (DropGUISlotButton)Program.UsingButton;
@@ -288,14 +294,14 @@ namespace Lost_Soul
                     }
                     break;
                 case Keyboard.Key.Return:
-                    //if (Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.Drop[Program.Data.CurrentParty.MainParty.MyParty[0].Y + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY][Program.Data.CurrentParty.MainParty.MyParty[0].X + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX].Count > 0)
+                    //if (Logic.CurrentParty.MainParty.MyParty[0].CurMap.Drop[Logic.CurrentParty.MainParty.MyParty[0].Y + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY][Logic.CurrentParty.MainParty.MyParty[0].X + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX].Count > 0)
                     //{
-                        //Program.Data.CurrentParty.MainParty.MyParty[0].PickItems(Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.Drop[Program.Data.CurrentParty.MainParty.MyParty[0].Y + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY][Program.Data.CurrentParty.MainParty.MyParty[0].X + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX][Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.Drop[Program.Data.CurrentParty.MainParty.MyParty[0].Y + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY][Program.Data.CurrentParty.MainParty.MyParty[0].X + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX].Count - 1]);
+                        //Logic.CurrentParty.MainParty.MyParty[0].PickItems(Logic.CurrentParty.MainParty.MyParty[0].CurMap.Drop[Logic.CurrentParty.MainParty.MyParty[0].Y + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY][Logic.CurrentParty.MainParty.MyParty[0].X + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX][Logic.CurrentParty.MainParty.MyParty[0].CurMap.Drop[Logic.CurrentParty.MainParty.MyParty[0].Y + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY][Logic.CurrentParty.MainParty.MyParty[0].X + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX].Count - 1]);
                         GameGUI[5].Visibility = true;
                     //}
                     break;
                 case Keyboard.Key.X:
-                    Program.Data.CurrentParty.MainParty.MyParty[0].CurrentAction = 0;
+                    Logic.CurrentParty.MainParty.MyParty[0].CurrentAction = 0;
                     noitem = true;
                     if (sb != null)
                     {
@@ -307,18 +313,18 @@ namespace Lost_Soul
 
                         if (noitem)
                         {
-                            Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX]] = null;
-                            Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX] = -1;
+                            Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX]] = null;
+                            Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX] = -1;
                         }
                     }
                     GameGUI[9].Visibility = false;
-                    Program.Data.CurrentParty.MainParty.MyParty[0].PathfindingPath.Clear();
-                    Program.Data.CurrentParty.MainParty.MyParty[0].GeneralBehavior = (int)GeneralBehaviorType.Normal;
-                    Program.Data.CurrentParty.MainParty.MyParty[0].Action(0);
+                    Logic.CurrentParty.MainParty.MyParty[0].PathfindingPath.Clear();
+                    Logic.CurrentParty.MainParty.MyParty[0].GeneralBehavior = (int)GeneralBehaviorType.Normal;
+                    Logic.CurrentParty.MainParty.MyParty[0].Action(0);
                     break;
 
                 case Keyboard.Key.C:
-                    Program.Data.CurrentParty.MainParty.MyParty[0].CurrentAction = 0;
+                    Logic.CurrentParty.MainParty.MyParty[0].CurrentAction = 0;
                     noitem = true;
                     if (sb != null)
                     {
@@ -330,17 +336,17 @@ namespace Lost_Soul
 
                         if (noitem)
                         {
-                            Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX]] = null;
-                            Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX] = -1;
+                            Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX]] = null;
+                            Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX] = -1;
                         }
                     }
                     GameGUI[9].Visibility = false;
-                    Program.Data.CurrentParty.MainParty.MyParty[0].PathfindingPath.Clear();
-                    Program.Data.CurrentParty.MainParty.MyParty[0].GeneralBehavior = (int)GeneralBehaviorType.Normal;
-                    Program.Data.CurrentParty.MainParty.MyParty[0].Action(1);
+                    Logic.CurrentParty.MainParty.MyParty[0].PathfindingPath.Clear();
+                    Logic.CurrentParty.MainParty.MyParty[0].GeneralBehavior = (int)GeneralBehaviorType.Normal;
+                    Logic.CurrentParty.MainParty.MyParty[0].Action(1);
                     break;
                 case Keyboard.Key.Tab:
-                    Program.Data.CurrentParty.MainParty.MyParty[0].CurrentAction = 0;
+                    Logic.CurrentParty.MainParty.MyParty[0].CurrentAction = 0;
                     noitem = true;
                     if (sb != null)
                     {
@@ -351,12 +357,12 @@ namespace Lost_Soul
                         }
                         if (noitem)
                         {
-                            Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX]] = null;
-                            Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX] = -1;
+                            Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX]] = null;
+                            Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX] = -1;
                         }
                     }
                     GameGUI[9].Visibility = false;
-                    Program.Data.CurrentParty.MainParty.SwapMember(1);
+                    Logic.CurrentParty.MainParty.SwapMember(1);
                     break;
                 case Keyboard.Key.Escape:
                     GameGUI[9].Visibility = false;
@@ -368,7 +374,7 @@ namespace Lost_Soul
         public void HandleMouse(Mouse.Button key)
         {
 
-            Map m = Program.Data.CurrentParty.MainParty.MyParty[0].CurMap;
+            Map m = Logic.CurrentParty.MainParty.MyParty[0].CurMap;
             int x = Mouse.GetPosition(_screen).X;
             int y = Mouse.GetPosition(_screen).Y;
             if (x >= GameGUI[0].X && x <= GameGUI[0].X + 369 && y >= GameGUI[0].Y && y <= GameGUI[0].Y + 25 && GameGUI[0].Visibility)
@@ -452,31 +458,31 @@ namespace Lost_Soul
                         return;
                     }
 
-                    GameGUI[6] = new RightClickGUI(_screen, Mouse.GetPosition(_screen).X, Mouse.GetPosition(_screen).Y, (int)(Mouse.GetPosition(_screen).X / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].X - _screen.Size.X / 2 / 16 - 1), (int)((Mouse.GetPosition(_screen).Y + 8) / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].Y - _screen.Size.Y / 2 / 16 - 1));
+                    GameGUI[6] = new RightClickGUI(_screen, Mouse.GetPosition(_screen).X, Mouse.GetPosition(_screen).Y, (int)(Mouse.GetPosition(_screen).X / 16 + Logic.CurrentParty.MainParty.MyParty[0].X - _screen.Size.X / 2 / 16 - 1), (int)((Mouse.GetPosition(_screen).Y + 8) / 16 + Logic.CurrentParty.MainParty.MyParty[0].Y - _screen.Size.Y / 2 / 16 - 1));
                     GameGUI[6].HandleMouse(key, x, y);
 
 
-                    if (Mouse.IsButtonPressed(Mouse.Button.Right) && Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[(int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1 + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY][(int)Mouse.GetPosition(_screen).X / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1 + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX] > -1 && Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[(int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1 + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY][(int)Mouse.GetPosition(_screen).X / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1 + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX]] is SpawnBuildable)
+                    if (Mouse.IsButtonPressed(Mouse.Button.Right) && Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[(int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Logic.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1 + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY][(int)Mouse.GetPosition(_screen).X / 16 + Logic.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1 + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX] > -1 && Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[(int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Logic.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1 + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY][(int)Mouse.GetPosition(_screen).X / 16 + Logic.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1 + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX]] is SpawnBuildable)
                     {
-                        SpawnBuildable b = (SpawnBuildable)Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[(int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1 + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY][(int)Mouse.GetPosition(_screen).X / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1 + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX]];
+                        SpawnBuildable b = (SpawnBuildable)Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[(int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Logic.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1 + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY][(int)Mouse.GetPosition(_screen).X / 16 + Logic.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1 + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX]];
                         if (!b.Builded)
                         {
-                            Program.Data.CurrentParty.MainParty.MyParty[0].TargetX = (int)Mouse.GetPosition(_screen).X / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1;
-                            Program.Data.CurrentParty.MainParty.MyParty[0].TargetY = (int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1;
-                            Program.Data.CurrentParty.MainParty.MyParty[0].CurrentAction = 2;
-                            Logic.DoPathFinding(Program.Data.CurrentParty.MainParty.MyParty[0]);
-                            Program.Data.CurrentParty.MainParty.MyParty[0].ActionDir = Program.Data.CurrentParty.MainParty.MyParty[0].PathfindingPath[0];
-                            Program.Data.CurrentParty.MainParty.MyParty[0].PathfindingPath.RemoveAt(0);
+                            Logic.CurrentParty.MainParty.MyParty[0].TargetX = (int)Mouse.GetPosition(_screen).X / 16 + Logic.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1;
+                            Logic.CurrentParty.MainParty.MyParty[0].TargetY = (int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Logic.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1;
+                            Logic.CurrentParty.MainParty.MyParty[0].CurrentAction = 2;
+                            Logic.DoPathFinding(Logic.CurrentParty.MainParty.MyParty[0]);
+                            Logic.CurrentParty.MainParty.MyParty[0].ActionDir = Logic.CurrentParty.MainParty.MyParty[0].PathfindingPath[0];
+                            Logic.CurrentParty.MainParty.MyParty[0].PathfindingPath.RemoveAt(0);
                             GameGUI[6].Visibility = false;
 
                         }
 
                         else
                         {
-                            //if (Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[(int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1 + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY][(int)Mouse.GetPosition(_screen).X / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1 + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX] > -1 && Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[(int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1 + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY][(int)Mouse.GetPosition(_screen).X / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1 + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX]] is SpawnBuildableFire)
+                            //if (Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[(int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Logic.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1 + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY][(int)Mouse.GetPosition(_screen).X / 16 + Logic.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1 + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX] > -1 && Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[(int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Logic.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1 + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY][(int)Mouse.GetPosition(_screen).X / 16 + Logic.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1 + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX]] is SpawnBuildableFire)
                             //{
-                            //    SpawnBuildableFire bfire = (SpawnBuildableFire)Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[(int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1 + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY][(int)Mouse.GetPosition(_screen).X / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1 + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX]];
-                                GameGUI[6] = new RightClickGUI(_screen, Mouse.GetPosition(_screen).X, Mouse.GetPosition(_screen).Y, (int)(Mouse.GetPosition(_screen).X / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].X - _screen.Size.X / 2 / 16 - 1), (int)((Mouse.GetPosition(_screen).Y + 8) / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].Y - _screen.Size.Y / 2 / 16 - 1));
+                            //    SpawnBuildableFire bfire = (SpawnBuildableFire)Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[(int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Logic.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1 + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY][(int)Mouse.GetPosition(_screen).X / 16 + Logic.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1 + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX]];
+                                GameGUI[6] = new RightClickGUI(_screen, Mouse.GetPosition(_screen).X, Mouse.GetPosition(_screen).Y, (int)(Mouse.GetPosition(_screen).X / 16 + Logic.CurrentParty.MainParty.MyParty[0].X - _screen.Size.X / 2 / 16 - 1), (int)((Mouse.GetPosition(_screen).Y + 8) / 16 + Logic.CurrentParty.MainParty.MyParty[0].Y - _screen.Size.Y / 2 / 16 - 1));
                                 GameGUI[6].HandleMouse(key, x, y);
                             //}
                         }
@@ -490,7 +496,7 @@ namespace Lost_Soul
                     {
                         case 0:
                             GameGUI[9].Visibility = false;
-                            Logic.BuildStuff((int)Mouse.GetPosition(_screen).X / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1 + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX, (int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1 + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY, CurrentObjectIndex, _screen, m);
+                            Logic.BuildStuff((int)Mouse.GetPosition(_screen).X / 16 + Logic.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1 + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX, (int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Logic.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1 + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY, CurrentObjectIndex, _screen, m);
                             ClickState = -1;
                             break;
                         default:
@@ -498,25 +504,25 @@ namespace Lost_Soul
                             {
                                 GameGUI[6].HandleMouse(key, x, y);
                                 GameGUI[6].Visibility = false;
-                                if(Program.Data.CurrentParty.MainParty.MyParty[0].CurrentAction == 4)
+                                if(Logic.CurrentParty.MainParty.MyParty[0].CurrentAction == 4)
                                 {
                                 }
                                 return;
                             }
                             else if (Mouse.IsButtonPressed(Mouse.Button.Left))
                             {
-                                Program.Data.CurrentParty.MainParty.MyParty[0].CurrentAction = 0;
-                                Program.Data.CurrentParty.MainParty.MyParty[0].TargetX = (int)Mouse.GetPosition(_screen).X / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1;
-                                Program.Data.CurrentParty.MainParty.MyParty[0].TargetY = (int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1;
-                                Logic.Pathfinder = Program.Data.CurrentParty.MainParty.MyParty[0];
-                                Logic.DoPathFinding(Program.Data.CurrentParty.MainParty.MyParty[0]);
+                                Logic.CurrentParty.MainParty.MyParty[0].CurrentAction = 0;
+                                Logic.CurrentParty.MainParty.MyParty[0].TargetX = (int)Mouse.GetPosition(_screen).X / 16 + Logic.CurrentParty.MainParty.MyParty[0].X - (int)_screen.Size.X / 2 / 16 - 1;
+                                Logic.CurrentParty.MainParty.MyParty[0].TargetY = (int)(Mouse.GetPosition(_screen).Y + 8) / 16 + Logic.CurrentParty.MainParty.MyParty[0].Y - (int)_screen.Size.Y / 2 / 16 - 1;
+                                Logic.Pathfinder = Logic.CurrentParty.MainParty.MyParty[0];
+                                Logic.DoPathFinding(Logic.CurrentParty.MainParty.MyParty[0]);
                                 ConstructionGUI gc = (ConstructionGUI)GameGUI[9];
                                 bool noitem = true;
                                 SpawnBuildable sb = null;
-                                if (Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX] > -1)
+                                if (Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX] > -1)
                                 {
-                                    if (Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX]] is SpawnBuildable)
-                                        sb = (SpawnBuildable)Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX]];
+                                    if (Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX]] is SpawnBuildable)
+                                        sb = (SpawnBuildable)Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX]];
                                 }
                                 if (sb != null)
                                 {
@@ -528,8 +534,8 @@ namespace Lost_Soul
 
                                     if (noitem)
                                     {
-                                        Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX]] = null;
-                                        Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX] = -1;
+                                        Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX]] = null;
+                                        Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[gc.LocY][gc.LocX] = -1;
                                     }
                                 }
                                 GameGUI[9].Visibility = false;
@@ -554,7 +560,7 @@ namespace Lost_Soul
                 DrawBox = false;
             else if (x >= GameGUI[2].X && x <= GameGUI[2].X + 140 && y >= GameGUI[2].Y && y <= GameGUI[2].Y + 200)
                 DrawBox = false;
-            else if (x >= GameGUI[3].X && x <= GameGUI[3].X + 147 && y >= GameGUI[3].Y && y <= GameGUI[3].Y + (Program.Data.CurrentParty.MainParty.MyParty.Count + 1) * 47 + (Program.Data.CurrentParty.MainParty.MyParty.Count) * 10)
+            else if (x >= GameGUI[3].X && x <= GameGUI[3].X + 147 && y >= GameGUI[3].Y && y <= GameGUI[3].Y + (Logic.CurrentParty.MainParty.MyParty.Count + 1) * 47 + (Logic.CurrentParty.MainParty.MyParty.Count) * 10)
                 DrawBox = false;
             else if (x >= GameGUI[4].X && x <= GameGUI[4].X + 250 && y >= GameGUI[4].Y && y <= GameGUI[4].Y + 130)
                 DrawBox = false;

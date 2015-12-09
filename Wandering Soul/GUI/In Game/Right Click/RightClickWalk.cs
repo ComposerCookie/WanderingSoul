@@ -42,11 +42,11 @@ namespace Lost_Soul
         {
             if (Mouse.IsButtonPressed(Mouse.Button.Left))
             {
-                Program.Data.CurrentParty.MainParty.MyParty[0].CurrentAction = 0;
-                Program.Data.CurrentParty.MainParty.MyParty[0].TargetX = LocX - Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX;
-                Program.Data.CurrentParty.MainParty.MyParty[0].TargetY = LocY - Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY;
-                Logic.DoPathFinding(Program.Data.CurrentParty.MainParty.MyParty[0]);
-                Program.SM.States[1].GameGUI[9].Visibility = false;
+                Logic.CurrentParty.MainParty.MyParty[0].CurrentAction = 0;
+                Logic.CurrentParty.MainParty.MyParty[0].TargetX = LocX - Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX;
+                Logic.CurrentParty.MainParty.MyParty[0].TargetY = LocY - Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY;
+                Logic.DoPathFinding(Logic.CurrentParty.MainParty.MyParty[0]);
+                Program.State[1].GameGUI[9].Visibility = false;
 
             }
         }

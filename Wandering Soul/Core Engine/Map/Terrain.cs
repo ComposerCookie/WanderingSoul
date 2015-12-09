@@ -14,10 +14,10 @@ namespace Lost_Soul
         int _startX;
         int _startY;
 
-        int MinVert;
-        int MinHor;
-        int MaxVert;
-        int MaxHor;
+        int _minVert;
+        int _minHor;
+        int _maxVert;
+        int _maxHor;
 
         public Terrain(int size, int type, int startX, int startY)
         {
@@ -25,7 +25,7 @@ namespace Lost_Soul
             _size = size;
             _startX = startX;
             _startY = startY;
-            MinHor = MinVert = MaxHor = MaxVert = 0;
+            _minHor = _minVert = _maxHor = _maxVert = 0;
         }
 
         public int Type
@@ -58,26 +58,26 @@ namespace Lost_Soul
 
         public int MaxVertical
         {
-            get { return MaxVert; }
-            set { MaxVert = value; }
+            get { return _maxVert; }
+            set { _maxVert = value; }
         }
 
         public int MaxHorizontal
         {
-            get { return MaxHor; }
-            set { MaxHor = value; }
+            get { return _maxHor; }
+            set { _maxHor = value; }
         }
 
         public int MinVertical
         {
-            get { return MinVert; }
-            set { MinVert = value; }
+            get { return _minVert; }
+            set { _minVert = value; }
         }
 
         public int MinHorizontal
         {
-            get { return MinHor; }
-            set { MinHor = value; }
+            get { return _minHor; }
+            set { _minHor = value; }
         }
     }
 }

@@ -25,14 +25,14 @@ namespace Lost_Soul
         {
             if (Mouse.IsButtonPressed(Mouse.Button.Left))
             {
-                CraftGUI g = (CraftGUI)Program.SM.States[1].GameGUI[10];
-                if (g.CurPick + 4 * g.PickPage < Logic.KnownRecipeForThisCharacter(Program.Data.CurrentParty.MainParty.MyParty[0], g.CurClass).Count)
+                CraftGUI g = (CraftGUI)Program.State[1].GameGUI[10];
+                if (g.CurPick + 4 * g.PickPage < Logic.KnownRecipeForThisCharacter(Logic.CurrentParty.MainParty.MyParty[0], g.CurClass).Count)
                 {
-                    Items i = Program.Data.MyItems[Logic.KnownRecipeForThisCharacter(Program.Data.CurrentParty.MainParty.MyParty[0], g.CurClass)[g.CurPick + 4 * g.PickPage]];
+                    Items i = Program.Data.MyItems[Logic.KnownRecipeForThisCharacter(Logic.CurrentParty.MainParty.MyParty[0], g.CurClass)[g.CurPick + 4 * g.PickPage]];
                     bool cancraft = true;
                     for (int r = 0; r < i.ItemRequired.Count; r++)
                     {
-                        if (Logic.GetTotalAmountOfThisItemIn(Program.Data.CurrentParty.MainParty.MyParty[0], i.ItemRequired.ElementAt(r).Key) < i.ItemRequired.ElementAt(r).Value)
+                        if (Logic.GetTotalAmountOfThisItemIn(Logic.CurrentParty.MainParty.MyParty[0], i.ItemRequired.ElementAt(r).Key) < i.ItemRequired.ElementAt(r).Value)
                             cancraft = false;
                     }
                     if (cancraft)
@@ -40,17 +40,17 @@ namespace Lost_Soul
                         int total = 0;
                         for (int r = 0; r < i.ItemRequired.Count; r++)
                         {
-                            //Logic.RemoveItemsFromInventory(Program.Data.CurrentParty.MainParty.MyParty[0], i.ItemRequired.ElementAt(r).Key, i.ItemRequired.ElementAt(r).Value);
-                            total += Logic.GetTotalAmountOfThisItemIn(Program.Data.CurrentParty.MainParty.MyParty[0], i.ItemRequired.ElementAt(r).Key);
+                            //Logic.RemoveItemsFromInventory(Logic.CurrentParty.MainParty.MyParty[0], i.ItemRequired.ElementAt(r).Key, i.ItemRequired.ElementAt(r).Value);
+                            total += Logic.GetTotalAmountOfThisItemIn(Logic.CurrentParty.MainParty.MyParty[0], i.ItemRequired.ElementAt(r).Key);
                         }
-                        Program.Data.CurrentParty.MainParty.MyParty[0].CurrentAction = 3;
-                        Program.Data.CurrentParty.MainParty.MyParty[0].CurrentActionIndex = Logic.KnownRecipeForThisCharacter(Program.Data.CurrentParty.MainParty.MyParty[0], g.CurClass)[g.CurPick + 4 * g.PickPage];
+                        Logic.CurrentParty.MainParty.MyParty[0].CurrentAction = 3;
+                        Logic.CurrentParty.MainParty.MyParty[0].CurrentActionIndex = Logic.KnownRecipeForThisCharacter(Logic.CurrentParty.MainParty.MyParty[0], g.CurClass)[g.CurPick + 4 * g.PickPage];
 
-                        Program.Data.CurrentParty.MainParty.MyParty[0].ActionCooldown = total * 30;
-                        //Program.Data.CurrentParty.MainParty.MyParty[0].Inventory[Program.Data.CurrentParty.MainParty.MyParty[0].FindNextEmptySpace()] = new SpawnItems(Logic.KnownRecipeForThisCharacter(Program.Data.CurrentParty.MainParty.MyParty[0], g.CurClass)[g.CurPick + 4 * g.PickPage]);
+                        Logic.CurrentParty.MainParty.MyParty[0].ActionCooldown = total * 30;
+                        //Logic.CurrentParty.MainParty.MyParty[0].Inventory[Logic.CurrentParty.MainParty.MyParty[0].FindNextEmptySpace()] = new SpawnItems(Logic.KnownRecipeForThisCharacter(Logic.CurrentParty.MainParty.MyParty[0], g.CurClass)[g.CurPick + 4 * g.PickPage]);
                     }
                 }
-            }//Program.SM.States[1].GameGUI[2].Visibility = !Program.SM.States[1].GameGUI[2].Visibility;
+            }//Program.State[1].GameGUI[2].Visibility = !Program.State[1].GameGUI[2].Visibility;
         }
         public bool isMouseHover()
         {

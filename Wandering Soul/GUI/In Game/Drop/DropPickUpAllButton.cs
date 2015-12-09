@@ -25,11 +25,14 @@ namespace Lost_Soul
         {
             if (Mouse.IsButtonPressed(Mouse.Button.Left))
             {
-                DropGUI g = (DropGUI)Program.SM.States[1].GameGUI[5];
-                for (int i = Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.Drop[g.DropY][g.DropX].Count - 1; i >= 0; i--)
+                DropGUI g = (DropGUI)Program.State[1].GameGUI[5];
+                for (int i = Logic.CurrentParty.MainParty.MyParty[0].CurMap.Drop[g.DropY][g.DropX].Count - 1; i >= 0; i--)
                 {
-                    if (Program.Data.CurrentParty.MainParty.MyParty[0].PickItems(Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.Drop[g.DropY][g.DropX][i]))
-                        Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.Drop[g.DropY][g.DropX][i] = null;
+                    int n = Logic.CurrentParty.MainParty.MyParty[0].FindNextEmptySpace();
+                    if (n < 16 && n < Logic.CurrentParty.MainParty.MyParty[0].ExtraInventorySpace + 8)
+                    {
+                        Logic.CurrentParty.MainParty.MyParty[0].PickItems(Logic.CurrentParty.MainParty.MyParty[0].CurMap.Drop[g.DropY][g.DropX][i]);
+                    }
                 }
             }
         }

@@ -23,12 +23,12 @@ namespace Lost_Soul
         public void Picked()
         {
             //Logic.MainMap = Program.Generator.NewMap();
-            PickPartyGUI g = (PickPartyGUI)Program.SM.States[0].GameGUI[1];
+            PickPartyGUI g = (PickPartyGUI)Program.State[0].GameGUI[1];
             if (Mouse.IsButtonPressed(Mouse.Button.Left))
             {
-                if (g.SelectedParty < Program.Data.MyPlayerDatas.Count)
+                if (g.SelectedParty < Program.Data.MyPlayerData.Count)
                 {
-                    Program.Data.MyPlayerDatas.RemoveAt(g.SelectedParty);
+                    Program.Data.MyPlayerData.RemoveAt(g.SelectedParty);
                 }
             }
         }

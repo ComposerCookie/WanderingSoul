@@ -36,14 +36,14 @@ namespace Lost_Soul
             s.Position = new Vector2f(X, Y);
             _screen.Draw(s);
 
-            PickPartyGUI g = (PickPartyGUI)Program.SM.States[0].GameGUI[1];
-            if (g.SelectedParty > -1 && g.SelectedParty < Program.Data.MyPlayerDatas.Count && Program.Data.MyPlayerDatas[g.SelectedParty] != null)
+            PickPartyGUI g = (PickPartyGUI)Program.State[0].GameGUI[1];
+            if (g.SelectedParty > -1 && g.SelectedParty < Program.Data.MyPlayerData.Count && Program.Data.MyPlayerData[g.SelectedParty] != null)
             {
-                if (SlotID < Program.Data.MyPlayerDatas[g.SelectedParty].MainParty.MyParty.Count)
+                if (SlotID < Program.Data.MyPlayerData[g.SelectedParty].MainParty.MyParty.Count)
                 {
                     s.Texture = Program.Data.SpriteBasedOnType(SpriteType.Button)[BarID];
                     s.Position = new Vector2f(X + 2, Y + 2);
-                    s.TextureRect = new IntRect(0, 0, Program.Data.MyPlayerDatas[g.SelectedParty].MainParty.MyParty[SlotID].CurMana * 100 / Logic.GetMaxManaBasedOnStat(Program.Data.MyPlayerDatas[g.SelectedParty].MainParty.MyParty[SlotID]) * (int)s.Texture.Size.X / 100, (int)s.Texture.Size.Y);
+                    s.TextureRect = new IntRect(0, 0, Program.Data.MyPlayerData[g.SelectedParty].MainParty.MyParty[SlotID].CurrentMana * 100 / Program.Data.MyPlayerData[g.SelectedParty].MainParty.MyParty[SlotID].MaxMana * (int)s.Texture.Size.X / 100, (int)s.Texture.Size.Y);
                     _screen.Draw(s);
                 }
             }

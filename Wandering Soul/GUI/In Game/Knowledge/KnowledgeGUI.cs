@@ -82,7 +82,7 @@ namespace Lost_Soul
             t.Font = Program.Data.Font;
             t.CharacterSize = 9;
             t.Color = Color.Yellow;
-            t.DisplayedString = "" + Program.Data.CurrentParty.MainParty.MyParty[0].LearningPoint;
+            t.DisplayedString = "" + Logic.CurrentParty.MainParty.MyParty[0].LearningPoint;
             t.Position = new Vector2f(X + 146, Y + 28);
 
             _screen.Draw(t);

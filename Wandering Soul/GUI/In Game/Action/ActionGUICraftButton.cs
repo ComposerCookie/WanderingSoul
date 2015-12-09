@@ -24,7 +24,7 @@ namespace Lost_Soul
         public void Picked()
         {
             if (Mouse.IsButtonPressed(Mouse.Button.Left))
-                Program.SM.States[1].GameGUI[10].Visibility = !Program.SM.States[1].GameGUI[10].Visibility;
+                Program.State[1].GameGUI[10].Visibility = !Program.State[1].GameGUI[10].Visibility;
         }
         public bool isMouseHover()
         {

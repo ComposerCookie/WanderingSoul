@@ -23,15 +23,15 @@ namespace Lost_Soul
         public void Picked()
         {
             //Logic.MainMap = Program.Generator.NewMap();
-            PickPartyGUI g = (PickPartyGUI)Program.SM.States[0].GameGUI[1];
-            if (Program.Data.MyPlayerDatas.Count > 0)
+            PickPartyGUI g = (PickPartyGUI)Program.State[0].GameGUI[1];
+            if (Program.Data.MyPlayerData.Count > 0)
             {
-                if (g.SelectedParty < Program.Data.MyPlayerDatas.Count)
+                if (g.SelectedParty < Program.Data.MyPlayerData.Count)
                 {
-                    Program.Data.CurrentParty = Program.Data.MyPlayerDatas[g.SelectedParty];
-                    Program.SM.States[0].GameGUI[1].Visibility = false;
-                    Program.SM.States[0].GameGUI[2].Visibility = false;
-                    Program.SM.States[0].GameGUI[5].Visibility = true;
+                    Logic.CurrentParty = Program.Data.MyPlayerData[g.SelectedParty];
+                    Program.State[0].GameGUI[1].Visibility = false;
+                    Program.State[0].GameGUI[2].Visibility = false;
+                    Program.State[0].GameGUI[5].Visibility = true;
                 }
             }
         }

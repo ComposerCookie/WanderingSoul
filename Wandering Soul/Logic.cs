@@ -10,48 +10,9 @@ namespace Lost_Soul
 {
     public class Logic
     {
-        
+        static public World CurrentWorld { get; set; }
+        static public PlayerData CurrentParty { get; set; }
         static public Random r = new Random();
-
-
-        static public int GetMaxHealthBasedOnStat(LivingObject p)
-        {
-            int maxhealth = 30; //base health for every playable character
-
-            if (p is NPC)
-            {
-                NPC person = (NPC)p;
-                switch ((JobType)person.Job)
-                {
-                    case JobType.Novice:
-                        maxhealth += 10 * person.Level;
-                        break;
-                }
-            }
-
-            maxhealth += 15 * p.Endurance;
-
-            return maxhealth;
-        }
-
-        static public int GetMaxManaBasedOnStat(LivingObject p)
-        {
-            int maxmana = 10; //base mana for every playable character
-            if (p is NPC)
-            {
-                NPC person = (NPC)p;
-                switch ((JobType)person.Job)
-                {
-                    case JobType.Novice:
-                        maxmana += 2 * person.Level;
-                        break;
-                }
-            }
-
-            maxmana += 10 * p.Willpower;
-
-            return maxmana;
-        }
 
         static public int GetSpawnableType(SpawnSpawnable obj)
         {
@@ -84,15 +45,15 @@ namespace Lost_Soul
                 case 1:
                     if (CurrentParty != null && CurrentWorld != null)
                     {
-                        for (int i = 0; i < Program.Data.CurrentParty.MainParty.MyParty.Count; i++)
+                        for (int i = 0; i < Logic.CurrentParty.MainParty.MyParty.Count; i++)
                         {
-                            Program.Data.CurrentParty.MainParty.MyParty[i].OnMapType = Program.Data.CurrentWorld.SpawnPlaceMapType;
-                            Program.Data.CurrentParty.MainParty.MyParty[i].SideMapID = Program.Data.CurrentWorld.SpawnMapIndex;
-                            Program.Data.CurrentParty.MainParty.MyParty[i].X = Program.Data.CurrentWorld.SpawnMapX;
-                            Program.Data.CurrentParty.MainParty.MyParty[i].Y = Program.Data.CurrentWorld.SpawnMapY;
-                            Program.Data.CurrentParty.MainParty.MyParty[i].PutOnMap();
+                            Logic.CurrentParty.MainParty.MyParty[i].OnMapType = Logic.CurrentWorld.SpawnPlaceMapType;
+                            Logic.CurrentParty.MainParty.MyParty[i].SideMapID = Logic.CurrentWorld.SpawnMapIndex;
+                            Logic.CurrentParty.MainParty.MyParty[i].X = Logic.CurrentWorld.SpawnMapX;
+                            Logic.CurrentParty.MainParty.MyParty[i].Y = Logic.CurrentWorld.SpawnMapY;
+                            Logic.CurrentParty.MainParty.MyParty[i].PutOnMap();
 
-                            InGameState s = (InGameState)Program.SM.States[1];
+                            InGameState s = (InGameState)Program.State[1];
                             s.Initialize();
                             Program.InState = 1;
                         }
@@ -422,7 +383,7 @@ namespace Lost_Soul
                 {
                     NPC n = (NPC)attacker;
                     Resource r = (Resource)Program.Data.GetResourceList()[_object.ID];
-                    if (((n.Equipment[11] != null && Program.Data.MyItems[n.Equipment[11].ID] is ToolItem) || (n.Equipment[7] != null && Program.Data.MyItems[n.Equipment[7].ID] is ToolItem)) && Program.Data.CurrentParty.MainParty.MyParty[0].KnowledgeKnown.Contains(1))
+                    if (((n.Equipment[11] != null && Program.Data.MyItems[n.Equipment[11].ID] is ToolItem) || (n.Equipment[7] != null && Program.Data.MyItems[n.Equipment[7].ID] is ToolItem)) && Logic.CurrentParty.MainParty.MyParty[0].KnowledgeKnown.Contains(1))
                     {
                         _object.CurHealth--;
                         if (_object.CurHealth == 0)
@@ -603,16 +564,16 @@ namespace Lost_Soul
 
             if (buildable)
             {
-                Program.Data.CurrentParty.MainParty.MyParty[0].TargetX = (int)Mouse.GetPosition(rw).X / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].X - (int)rw.Size.X / 2 / 16 - 1;
-                Program.Data.CurrentParty.MainParty.MyParty[0].TargetY = (int)(Mouse.GetPosition(rw).Y + 8) / 16 + Program.Data.CurrentParty.MainParty.MyParty[0].Y - (int)rw.Size.Y / 2 / 16 - 1;
-                DoPathFinding(Program.Data.CurrentParty.MainParty.MyParty[0]);
-                if (Program.Data.CurrentParty.MainParty.MyParty[0].PathfindingPath.Count < 1)
+                Logic.CurrentParty.MainParty.MyParty[0].TargetX = (int)Mouse.GetPosition(rw).X / 16 + Logic.CurrentParty.MainParty.MyParty[0].X - (int)rw.Size.X / 2 / 16 - 1;
+                Logic.CurrentParty.MainParty.MyParty[0].TargetY = (int)(Mouse.GetPosition(rw).Y + 8) / 16 + Logic.CurrentParty.MainParty.MyParty[0].Y - (int)rw.Size.Y / 2 / 16 - 1;
+                DoPathFinding(Logic.CurrentParty.MainParty.MyParty[0]);
+                if (Logic.CurrentParty.MainParty.MyParty[0].PathfindingPath.Count < 1)
                     return;
-                Program.Data.CurrentParty.MainParty.MyParty[0].ActionDir = Program.Data.CurrentParty.MainParty.MyParty[0].PathfindingPath[0];
-                Program.Data.CurrentParty.MainParty.MyParty[0].PathfindingPath.RemoveAt(0);
+                Logic.CurrentParty.MainParty.MyParty[0].ActionDir = Logic.CurrentParty.MainParty.MyParty[0].PathfindingPath[0];
+                Logic.CurrentParty.MainParty.MyParty[0].PathfindingPath.RemoveAt(0);
 
-                Program.Data.CurrentParty.MainParty.MyParty[0].CurrentAction = 1;
-                Program.Data.CurrentParty.MainParty.MyParty[0].CurrentActionIndex = id;
+                Logic.CurrentParty.MainParty.MyParty[0].CurrentAction = 1;
+                Logic.CurrentParty.MainParty.MyParty[0].CurrentActionIndex = id;
             }
         }
 

@@ -22,9 +22,9 @@ namespace Lost_Soul
         }
         public void Picked()
         {
-            Program.SM.States[0].GameGUI[6].Visibility = false;
-            Program.SM.States[0].GameGUI[5].Visibility = true;
-            Program.SM.States[0].CurrentGUI = 5;
+            Program.State[0].GameGUI[6].Visibility = false;
+            Program.State[0].GameGUI[5].Visibility = true;
+            Program.State[0].CurrentGUI = 5;
         }
         public bool isMouseHover()
         {

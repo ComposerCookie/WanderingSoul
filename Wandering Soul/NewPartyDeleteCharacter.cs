@@ -23,7 +23,7 @@ namespace Lost_Soul
         }
         public void Picked()
         {
-            NewPartyGUI g = (NewPartyGUI)Program.SM.States[0].GameGUI[3];
+            NewPartyGUI g = (NewPartyGUI)Program.State[0].GameGUI[3];
             if (SlotID < g.CurrentSession.MainParty.MyParty.Count && SlotID < Program.Data.PartySlotUnlock)
             {
                 g.CurrentSession.MainParty.MyParty.RemoveAt(SlotID);
@@ -35,7 +35,7 @@ namespace Lost_Soul
         }
         public void Draw()
         {
-            NewPartyGUI g = (NewPartyGUI)Program.SM.States[0].GameGUI[3];
+            NewPartyGUI g = (NewPartyGUI)Program.State[0].GameGUI[3];
             if (SlotID < g.CurrentSession.MainParty.MyParty.Count && SlotID < Program.Data.PartySlotUnlock)
             {
                 SFML.Graphics.Sprite s = new SFML.Graphics.Sprite(Program.Data.SpriteBasedOnType(SpriteType.Button)[ID]);

@@ -28,19 +28,19 @@ namespace Lost_Soul
             {
                 if (State == 0)
                 {
-                    ConstructionGUI g = (ConstructionGUI)Program.SM.States[1].GameGUI[9];
-                    if (Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[g.LocY][g.LocX] > -1)
+                    ConstructionGUI g = (ConstructionGUI)Program.State[1].GameGUI[9];
+                    if (Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[g.LocY][g.LocX] > -1)
                     {
-                        if (Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[g.LocY][g.LocX] > -1)
+                        if (Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[g.LocY][g.LocX] > -1)
                         {
-                            SpawnBuildable b = (SpawnBuildable)Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[g.LocY][g.LocX]];
+                            SpawnBuildable b = (SpawnBuildable)Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[g.LocY][g.LocX]];
                             if (SlotID + 3 * g.CurPage < b.Required.Count)
                             {
                                 if (b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.Count > 0)
                                 {
                                     State = 1;
                                     Program.UsingButton = this;
-                                    Program.SM.MouseState = (int)MouseStateType.Dragging;
+                                    Program.MouseState = (int)MouseStateType.Dragging;
 
                                 }
                             }
@@ -71,11 +71,11 @@ namespace Lost_Soul
             s.Position = new Vector2f(X, Y);
             _screen.Draw(s);
 
-            ConstructionGUI g = (ConstructionGUI)Program.SM.States[1].GameGUI[9];
-            if (Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[g.LocY][g.LocX] > -1)
+            ConstructionGUI g = (ConstructionGUI)Program.State[1].GameGUI[9];
+            if (Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[g.LocY][g.LocX] > -1)
             {
-                SpawnBuildable b = (SpawnBuildable)Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[g.LocY][g.LocX]];
-                if (SlotID + 3 * g.CurPage < b.Required.Count)//SlotID + 3 * g.CurPage < Program.Data.MySpawnable[Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[g.LocY][g.LocX]].ID].)
+                SpawnBuildable b = (SpawnBuildable)Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[g.LocY][g.LocX]];
+                if (SlotID + 3 * g.CurPage < b.Required.Count)//SlotID + 3 * g.CurPage < Program.Data.MySpawnable[Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[g.LocY][g.LocX]].ID].)
                 {
                     s = new SFML.Graphics.Sprite(Program.Data.SpriteBasedOnType(SpriteType.Items)[Program.Data.MyItems[b.Required.ElementAt(SlotID + 3 * g.CurPage).Key.ID].Sprite]);
                     s.Position = new Vector2f(X, Y);
@@ -95,11 +95,11 @@ namespace Lost_Soul
 
         public void HandleLocation()
         {
-            ConstructionGUI g = (ConstructionGUI)Program.SM.States[1].GameGUI[9];
+            ConstructionGUI g = (ConstructionGUI)Program.State[1].GameGUI[9];
             SpawnItems temp;
-            if (Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[g.LocY][g.LocX] > -1)
+            if (Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[g.LocY][g.LocX] > -1)
             {
-                SpawnBuildable b = (SpawnBuildable)Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[g.LocY][g.LocX]];
+                SpawnBuildable b = (SpawnBuildable)Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[g.LocY][g.LocX]];
 
                 if (State == 1 && Program.UsingButton != null)
                 {
@@ -109,22 +109,22 @@ namespace Lost_Soul
                     //{
                     //    GameGUI[0].HandleMouse(key, x, y);
                     //}
-                    if (x >= Program.SM.States[1].GameGUI[1].X && x <= Program.SM.States[1].GameGUI[1].X + 178 && y >= Program.SM.States[1].GameGUI[1].Y && y <= Program.SM.States[1].GameGUI[1].Y + 178)
+                    if (x >= Program.State[1].GameGUI[1].X && x <= Program.State[1].GameGUI[1].X + 178 && y >= Program.State[1].GameGUI[1].Y && y <= Program.State[1].GameGUI[1].Y + 178)
                     {
-                        if (Program.SM.States[1].GameGUI[1].Visibility)
+                        if (Program.State[1].GameGUI[1].Visibility)
                         {
                             for (int r = 0; r < 4; r++)
                             {
                                 for (int c = 0; c < 4; c++)
                                 {
 
-                                    if (x >= Program.SM.States[1].GameGUI[1].X + (c * 38) + 6 && x <= Program.SM.States[1].GameGUI[1].X + 38 * (c + 1) && y >= Program.SM.States[1].GameGUI[1].Y + 26 + (r * 38) && y <= Program.SM.States[1].GameGUI[1].Y + (r + 1) * 38 + 26)
+                                    if (x >= Program.State[1].GameGUI[1].X + (c * 38) + 6 && x <= Program.State[1].GameGUI[1].X + 38 * (c + 1) && y >= Program.State[1].GameGUI[1].Y + 26 + (r * 38) && y <= Program.State[1].GameGUI[1].Y + (r + 1) * 38 + 26)
                                     {
-                                        if (r * 4 + c >= 8 + Program.Data.CurrentParty.MainParty.MyParty[0].ExtraInventorySpace)
+                                        if (r * 4 + c >= 8 + Logic.CurrentParty.MainParty.MyParty[0].ExtraInventorySpace)
                                             return;
-                                        if (Program.Data.CurrentParty.MainParty.MyParty[0].Inventory[r * 4 + c] == null)
+                                        if (Logic.CurrentParty.MainParty.MyParty[0].Inventory[r * 4 + c] == null)
                                         {
-                                            Program.Data.CurrentParty.MainParty.MyParty[0].Inventory[r * 4 + c] = b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0];
+                                            Logic.CurrentParty.MainParty.MyParty[0].Inventory[r * 4 + c] = b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0];
                                             b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.RemoveAt(0);
                                             State = 0;
                                             Program.UsingButton = null;
@@ -134,7 +134,7 @@ namespace Lost_Soul
 
                                         else
                                         {
-                                            temp = Program.Data.CurrentParty.MainParty.MyParty[0].Inventory[r * 4 + c];
+                                            temp = Logic.CurrentParty.MainParty.MyParty[0].Inventory[r * 4 + c];
                                             if (temp.ID == b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0].ID && Program.Data.MyItems[temp.ID].Stackable)
                                             {
                                                 temp.Amount += b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0].Amount;
@@ -146,7 +146,7 @@ namespace Lost_Soul
                                             }
                                             else
                                             {
-                                                Program.Data.CurrentParty.MainParty.MyParty[0].Inventory[r * 4 + c] = b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0];
+                                                Logic.CurrentParty.MainParty.MyParty[0].Inventory[r * 4 + c] = b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0];
                                                 b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.Insert(0, temp);
                                                 return;
                                             }
@@ -158,45 +158,45 @@ namespace Lost_Soul
                     }
 
 
-                    else if (x >= Program.SM.States[1].GameGUI[2].X && x <= Program.SM.States[1].GameGUI[2].X + 140 && y >= Program.SM.States[1].GameGUI[2].Y && y <= Program.SM.States[1].GameGUI[2].Y + 200)
+                    else if (x >= Program.State[1].GameGUI[2].X && x <= Program.State[1].GameGUI[2].X + 140 && y >= Program.State[1].GameGUI[2].Y && y <= Program.State[1].GameGUI[2].Y + 200)
                     {
-                        if (Program.SM.States[1].GameGUI[2].Visibility)
+                        if (Program.State[1].GameGUI[2].Visibility)
                         {
                             switch ((ItemType)Program.Data.MyItems[b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0].ID].Type)
                             {
                                 case ItemType.Weapon:
-                                    if (x >= Program.SM.States[1].GameGUI[2].X + 33 && x <= Program.SM.States[1].GameGUI[2].X + 65 && y >= Program.SM.States[1].GameGUI[2].Y + 95 && y <= Program.SM.States[1].GameGUI[2].Y + 127)
+                                    if (x >= Program.State[1].GameGUI[2].X + 33 && x <= Program.State[1].GameGUI[2].X + 65 && y >= Program.State[1].GameGUI[2].Y + 95 && y <= Program.State[1].GameGUI[2].Y + 127)
                                     {
 
-                                        if (Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[11] == null)
+                                        if (Logic.CurrentParty.MainParty.MyParty[0].Equipment[11] == null)
                                         {
-                                            Program.Data.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 11);
+                                            Logic.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 11);
                                             b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.RemoveAt(0);
                                             State = 0;
                                             Program.UsingButton = null;
                                             Program.MouseState = (int)MouseStateType.Normal;;
                                         }
-                                        else if ((ItemType)Program.Data.MyItems[Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[11].ID].Type == ItemType.Weapon)
+                                        else if ((ItemType)Program.Data.MyItems[Logic.CurrentParty.MainParty.MyParty[0].Equipment[11].ID].Type == ItemType.Weapon)
                                         {
-                                            temp = Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[11];
-                                            Program.Data.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 11);
+                                            temp = Logic.CurrentParty.MainParty.MyParty[0].Equipment[11];
+                                            Logic.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 11);
                                             b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.Insert(0, temp);
                                         }
                                     }
                                     if (x >= X + 104 && x <= X + 136 && y >= Y + 95 && y <= Y + 127)
                                     {
-                                        if (Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[7] == null)
+                                        if (Logic.CurrentParty.MainParty.MyParty[0].Equipment[7] == null)
                                         {
-                                            Program.Data.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 7);
+                                            Logic.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 7);
                                             b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.RemoveAt(0);
                                             State = 0;
                                             Program.UsingButton = null;
                                             Program.MouseState = (int)MouseStateType.Normal;
                                         }
-                                        else if ((ItemType)Program.Data.MyItems[Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[7].ID].Type == ItemType.Weapon)
+                                        else if ((ItemType)Program.Data.MyItems[Logic.CurrentParty.MainParty.MyParty[0].Equipment[7].ID].Type == ItemType.Weapon)
                                         {
-                                            temp = Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[7];
-                                            Program.Data.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 7);
+                                            temp = Logic.CurrentParty.MainParty.MyParty[0].Equipment[7];
+                                            Logic.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 7);
                                             b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.Insert(0, temp);
                                         }
                                     }
@@ -205,18 +205,18 @@ namespace Lost_Soul
                                 case ItemType.Storage:
                                     if (x >= X + 103 && x <= X + 135 && y >= Y + 163 && y <= Y + 195)
                                     {
-                                        if (Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[10] == null)
+                                        if (Logic.CurrentParty.MainParty.MyParty[0].Equipment[10] == null)
                                         {
-                                            Program.Data.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 10);
+                                            Logic.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 10);
                                             b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.RemoveAt(0);
                                             State = 0;
                                             Program.UsingButton = null;
                                             Program.MouseState = (int)MouseStateType.Normal;
                                         }
-                                        else if ((ItemType)Program.Data.MyItems[Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[10].ID].Type == ItemType.Weapon)
+                                        else if ((ItemType)Program.Data.MyItems[Logic.CurrentParty.MainParty.MyParty[0].Equipment[10].ID].Type == ItemType.Weapon)
                                         {
-                                            temp = Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[10];
-                                            Program.Data.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 10);
+                                            temp = Logic.CurrentParty.MainParty.MyParty[0].Equipment[10];
+                                            Logic.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 10);
                                             b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.Insert(0, temp);
                                         }
                                     }
@@ -225,36 +225,36 @@ namespace Lost_Soul
                                 case ItemType.Ring:
                                     if (x >= X + 5 && x <= X + 37 && y >= Y + 163 && y <= Y + 195)
                                     {
-                                        if (Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[9] == null)
+                                        if (Logic.CurrentParty.MainParty.MyParty[0].Equipment[9] == null)
                                         {
-                                            Program.Data.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 9);
+                                            Logic.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 9);
                                             b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.RemoveAt(0);
                                             State = 0;
                                             Program.UsingButton = null;
                                             Program.MouseState = (int)MouseStateType.Normal;
                                         }
-                                        else if ((ItemType)Program.Data.MyItems[Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[9].ID].Type == ItemType.Ring)
+                                        else if ((ItemType)Program.Data.MyItems[Logic.CurrentParty.MainParty.MyParty[0].Equipment[9].ID].Type == ItemType.Ring)
                                         {
-                                            temp = Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[9];
-                                            Program.Data.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 9);
+                                            temp = Logic.CurrentParty.MainParty.MyParty[0].Equipment[9];
+                                            Logic.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 9);
                                             b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.Insert(0, temp);
                                         }
                                     }
 
                                     if (x >= X + 5 && x <= X + 37 && y >= Y + 128 && y <= Y + 160)
                                     {
-                                        if (Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[8] == null)
+                                        if (Logic.CurrentParty.MainParty.MyParty[0].Equipment[8] == null)
                                         {
-                                            Program.Data.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 8);
+                                            Logic.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 8);
                                             b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.RemoveAt(0);
                                             State = 0;
                                             Program.UsingButton = null;
                                             Program.MouseState = (int)MouseStateType.Normal;
                                         }
-                                        else if ((ItemType)Program.Data.MyItems[Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[8].ID].Type == ItemType.Ring)
+                                        else if ((ItemType)Program.Data.MyItems[Logic.CurrentParty.MainParty.MyParty[0].Equipment[8].ID].Type == ItemType.Ring)
                                         {
-                                            temp = Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[8];
-                                            Program.Data.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 8);
+                                            temp = Logic.CurrentParty.MainParty.MyParty[0].Equipment[8];
+                                            Logic.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 8);
                                             b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.Insert(0, temp);
                                         }
                                     }
@@ -262,18 +262,18 @@ namespace Lost_Soul
                                 case ItemType.Necklace:
                                     if (x >= X + 6 && x <= X + 38 && y >= Y + 26 && y <= Y + 58)
                                     {
-                                        if (Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[6] == null)
+                                        if (Logic.CurrentParty.MainParty.MyParty[0].Equipment[6] == null)
                                         {
-                                            Program.Data.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 6);
+                                            Logic.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 6);
                                             b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.RemoveAt(0);
                                             State = 0;
                                             Program.UsingButton = null;
                                             Program.MouseState = (int)MouseStateType.Normal;
                                         }
-                                        else if ((ItemType)Program.Data.MyItems[Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[6].ID].Type == ItemType.Necklace)
+                                        else if ((ItemType)Program.Data.MyItems[Logic.CurrentParty.MainParty.MyParty[0].Equipment[6].ID].Type == ItemType.Necklace)
                                         {
-                                            temp = Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[6];
-                                            Program.Data.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 6);
+                                            temp = Logic.CurrentParty.MainParty.MyParty[0].Equipment[6];
+                                            Logic.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 6);
                                             b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.Insert(0, temp);
                                         }
                                     }
@@ -282,18 +282,18 @@ namespace Lost_Soul
                                 case ItemType.Helmet:
                                     if (x >= X + 68 && x <= X + 100 && y >= Y + 46 && y <= Y + 78)
                                     {
-                                        if (Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[5] == null)
+                                        if (Logic.CurrentParty.MainParty.MyParty[0].Equipment[5] == null)
                                         {
-                                            Program.Data.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 5);
+                                            Logic.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 5);
                                             b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.RemoveAt(0);
                                             State = 0;
                                             Program.UsingButton = null;
                                             Program.MouseState = (int)MouseStateType.Normal;
                                         }
-                                        else if ((ItemType)Program.Data.MyItems[Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[5].ID].Type == ItemType.Helmet)
+                                        else if ((ItemType)Program.Data.MyItems[Logic.CurrentParty.MainParty.MyParty[0].Equipment[5].ID].Type == ItemType.Helmet)
                                         {
-                                            temp = Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[5];
-                                            Program.Data.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 5);
+                                            temp = Logic.CurrentParty.MainParty.MyParty[0].Equipment[5];
+                                            Logic.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 5);
                                             b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.Insert(0, temp);
                                         }
                                     }
@@ -302,18 +302,18 @@ namespace Lost_Soul
                                 case ItemType.Cape:
                                     if (x >= X + 104 && x <= X + 136 && y >= Y + 60 && y <= Y + 92)
                                     {
-                                        if (Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[4] == null)
+                                        if (Logic.CurrentParty.MainParty.MyParty[0].Equipment[4] == null)
                                         {
-                                            Program.Data.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 4);
+                                            Logic.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 4);
                                             b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.RemoveAt(0);
                                             State = 0;
                                             Program.UsingButton = null;
                                             Program.MouseState = (int)MouseStateType.Normal;
                                         }
-                                        else if ((ItemType)Program.Data.MyItems[Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[4].ID].Type == ItemType.Cape)
+                                        else if ((ItemType)Program.Data.MyItems[Logic.CurrentParty.MainParty.MyParty[0].Equipment[4].ID].Type == ItemType.Cape)
                                         {
-                                            temp = Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[4];
-                                            Program.Data.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 4);
+                                            temp = Logic.CurrentParty.MainParty.MyParty[0].Equipment[4];
+                                            Logic.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 4);
                                             b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.Insert(0, temp);
                                         }
                                     }
@@ -322,18 +322,18 @@ namespace Lost_Soul
                                 case ItemType.Bracelet:
                                     if (x >= X + 6 && x <= X + 32 && y >= Y + 62 && y <= Y + 94)
                                     {
-                                        if (Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[3] == null)
+                                        if (Logic.CurrentParty.MainParty.MyParty[0].Equipment[3] == null)
                                         {
-                                            Program.Data.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 3);
+                                            Logic.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 3);
                                             b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.RemoveAt(0);
                                             State = 0;
                                             Program.UsingButton = null;
                                             Program.MouseState = (int)MouseStateType.Normal;
                                         }
-                                        else if ((ItemType)Program.Data.MyItems[Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[3].ID].Type == ItemType.Bracelet)
+                                        else if ((ItemType)Program.Data.MyItems[Logic.CurrentParty.MainParty.MyParty[0].Equipment[3].ID].Type == ItemType.Bracelet)
                                         {
-                                            temp = Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[3];
-                                            Program.Data.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 3);
+                                            temp = Logic.CurrentParty.MainParty.MyParty[0].Equipment[3];
+                                            Logic.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 3);
                                             b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.Insert(0, temp);
                                         }
                                     }
@@ -342,18 +342,18 @@ namespace Lost_Soul
                                 case ItemType.Boot:
                                     if (x >= X + 69 && x <= X + 101 && y >= Y + 132 && y <= Y + 164)
                                     {
-                                        if (Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[2] == null)
+                                        if (Logic.CurrentParty.MainParty.MyParty[0].Equipment[2] == null)
                                         {
-                                            Program.Data.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 2);
+                                            Logic.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 2);
                                             b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.RemoveAt(0);
                                             State = 0;
                                             Program.UsingButton = null;
                                             Program.MouseState = (int)MouseStateType.Normal;
                                         }
-                                        else if ((ItemType)Program.Data.MyItems[Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[2].ID].Type == ItemType.Boot)
+                                        else if ((ItemType)Program.Data.MyItems[Logic.CurrentParty.MainParty.MyParty[0].Equipment[2].ID].Type == ItemType.Boot)
                                         {
-                                            temp = Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[2];
-                                            Program.Data.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 2);
+                                            temp = Logic.CurrentParty.MainParty.MyParty[0].Equipment[2];
+                                            Logic.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 2);
                                             b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.Insert(0, temp);
                                         }
                                     }
@@ -362,19 +362,19 @@ namespace Lost_Soul
                                 case ItemType.Armor:
                                     if (x >= X + 68 && x <= X + 100 && y >= Y + 89 && y <= Y + 121)
                                     {
-                                        if (Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[1] == null)
+                                        if (Logic.CurrentParty.MainParty.MyParty[0].Equipment[1] == null)
                                         {
-                                            Program.Data.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 1);
+                                            Logic.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 1);
                                             b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.RemoveAt(0);
                                             State = 0;
                                             Program.UsingButton = null;
                                             Program.MouseState = (int)MouseStateType.Normal;
                                         }
-                                        else if ((ItemType)Program.Data.MyItems[Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[1].ID].Type == ItemType.Armor)
+                                        else if ((ItemType)Program.Data.MyItems[Logic.CurrentParty.MainParty.MyParty[0].Equipment[1].ID].Type == ItemType.Armor)
                                         {
-                                            temp = Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[1];
+                                            temp = Logic.CurrentParty.MainParty.MyParty[0].Equipment[1];
                                             b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.RemoveAt(0);
-                                            Program.Data.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 1);
+                                            Logic.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 1);
                                             b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.Insert(0, temp);
                                         }
                                     }
@@ -383,17 +383,17 @@ namespace Lost_Soul
                                 case ItemType.Ammunition:
                                     if (x >= X + 104 && x <= X + 136 && y >= Y + 25 && y <= Y + 57)
                                     {
-                                        if (Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[0] == null)
+                                        if (Logic.CurrentParty.MainParty.MyParty[0].Equipment[0] == null)
                                         {
-                                            Program.Data.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 0);
+                                            Logic.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 0);
                                             b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.RemoveAt(0);
                                             State = 0;
                                             Program.UsingButton = null;
                                             Program.MouseState = (int)MouseStateType.Normal;
                                         }
-                                        else if ((ItemType)Program.Data.MyItems[Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[0].ID].Type == ItemType.Ammunition)
+                                        else if ((ItemType)Program.Data.MyItems[Logic.CurrentParty.MainParty.MyParty[0].Equipment[0].ID].Type == ItemType.Ammunition)
                                         {
-                                            temp = Program.Data.CurrentParty.MainParty.MyParty[0].Equipment[0];
+                                            temp = Logic.CurrentParty.MainParty.MyParty[0].Equipment[0];
                                             if (temp.ID == b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0].ID && Program.Data.MyItems[temp.ID].Stackable)
                                             {
                                                 temp.Amount += b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0].Amount;
@@ -404,7 +404,7 @@ namespace Lost_Soul
                                             }
                                             else
                                             {
-                                                Program.Data.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 0);
+                                                Logic.CurrentParty.MainParty.MyParty[0].EquipItems(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0], 0);
                                                 b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.Insert(0, temp);
                                             }
                                         }
@@ -414,10 +414,10 @@ namespace Lost_Soul
                         }
 
                     }
-                    else if (x >= Program.SM.States[1].GameGUI[5].X && x <= Program.SM.States[1].GameGUI[5].X + 178 && y >= Program.SM.States[1].GameGUI[5].Y && y <= Program.SM.States[1].GameGUI[5].Y + 140 && Program.SM.States[1].GameGUI[5].Visibility)
+                    else if (x >= Program.State[1].GameGUI[5].X && x <= Program.State[1].GameGUI[5].X + 178 && y >= Program.State[1].GameGUI[5].Y && y <= Program.State[1].GameGUI[5].Y + 140 && Program.State[1].GameGUI[5].Visibility)
                     {
-                        DropGUI dg = (DropGUI)Program.SM.States[1].GameGUI[5];
-                        Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.Drop[dg.DropY][dg.DropX].Add(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0]);
+                        DropGUI dg = (DropGUI)Program.State[1].GameGUI[5];
+                        Logic.CurrentParty.MainParty.MyParty[0].CurMap.Drop[dg.DropY][dg.DropX].Add(b.Required.ElementAt(SlotID + 3 * g.CurPage).Value[0]);
                         b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.RemoveAt(0);
                         State = 0;
                         Program.UsingButton = null;
@@ -460,9 +460,9 @@ namespace Lost_Soul
                     }
                     else
                     {
-                        Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.Drop[Program.Data.CurrentParty.MainParty.MyParty[0].Y + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY][Program.Data.CurrentParty.MainParty.MyParty[0].X + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX].Add(b.Required.ElementAt(SlotID + 3 * g.CurPage).Key);
+                        Logic.CurrentParty.MainParty.MyParty[0].CurMap.Drop[Logic.CurrentParty.MainParty.MyParty[0].Y + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY][Logic.CurrentParty.MainParty.MyParty[0].X + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX].Add(b.Required.ElementAt(SlotID + 3 * g.CurPage).Key);
                         b.Required.ElementAt(SlotID + 3 * g.CurPage).Value.RemoveAt(0);
-                        Program.Log.AddMessage((int)InGameLogMessageType.Event, Program.Data.CurrentParty.MainParty.MyParty[0].Name + " dropped a " + Program.Data.MyItems[b.Required.ElementAt(SlotID + 3 * g.CurPage).Key.ID].Name);
+                        Program.Log.AddMessage((int)InGameLogMessageType.Event, Logic.CurrentParty.MainParty.MyParty[0].Name + " dropped a " + Program.Data.MyItems[b.Required.ElementAt(SlotID + 3 * g.CurPage).Key.ID].Name);
                         State = 0;
                         Program.UsingButton = null;
                         Program.MouseState = (int)MouseStateType.Normal;

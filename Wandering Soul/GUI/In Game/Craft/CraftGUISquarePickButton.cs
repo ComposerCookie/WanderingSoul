@@ -25,7 +25,7 @@ namespace Lost_Soul
         public void Picked()
         {
             //if (Mouse.IsButtonPressed(Mouse.Button.Left))
-                //Program.SM.States[1].GameGUI[2].Visibility = !Program.SM.States[1].GameGUI[2].Visibility;
+                //Program.State[1].GameGUI[2].Visibility = !Program.State[1].GameGUI[2].Visibility;
         }
         public bool isMouseHover()
         {
@@ -37,10 +37,10 @@ namespace Lost_Soul
             s.Position = new Vector2f(X, Y);
             _screen.Draw(s);
 
-            CraftGUI g = (CraftGUI)Program.SM.States[1].GameGUI[10];
-            if (SlotID + 4 * g.PickPage < Logic.KnownRecipeForThisCharacter(Program.Data.CurrentParty.MainParty.MyParty[0], g.CurClass).Count)
+            CraftGUI g = (CraftGUI)Program.State[1].GameGUI[10];
+            if (SlotID + 4 * g.PickPage < Logic.KnownRecipeForThisCharacter(Logic.CurrentParty.MainParty.MyParty[0], g.CurClass).Count)
             {
-                s = new SFML.Graphics.Sprite(Program.Data.SpriteBasedOnType(SpriteType.Items)[Program.Data.MyItems[Logic.KnownRecipeForThisCharacter(Program.Data.CurrentParty.MainParty.MyParty[0], g.CurClass)[SlotID + 4 * g.PickPage]].Sprite]);
+                s = new SFML.Graphics.Sprite(Program.Data.SpriteBasedOnType(SpriteType.Items)[Program.Data.MyItems[Logic.KnownRecipeForThisCharacter(Logic.CurrentParty.MainParty.MyParty[0], g.CurClass)[SlotID + 4 * g.PickPage]].Sprite]);
                 s.Position = new Vector2f(X, Y);
                 _screen.Draw(s);
             }

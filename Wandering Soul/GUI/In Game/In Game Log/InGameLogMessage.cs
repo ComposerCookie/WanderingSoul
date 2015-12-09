@@ -9,14 +9,14 @@ namespace Lost_Soul
 {
     public class InGameLogMessage
     {
-        string Message;
+        string _message;
         int _type;
         RenderWindow _screen;
 
         public InGameLogMessage(RenderWindow rw, string msg, int length, int type)
         {
             CuttedMessage = new List<string>();
-            Message = msg;
+            _message = msg;
             _screen = rw;
             _type = type;
             CutMessageToBoxSize(length);
@@ -25,22 +25,22 @@ namespace Lost_Soul
         public void CutMessageToBoxSize(int length)
         {
             CuttedMessage = new List<string>();
-            Text test = new Text(Message, Program.Data.Font, 10);
+            Text test = new Text(_message, Program.Data.Font, 10);
             int count = 1;
             int lasti = 0;
-            for (int i = 0; i < Message.Length; i++)
+            for (int i = 0; i < _message.Length; i++)
             {
                 int asdf = (int)test.FindCharacterPos((uint)i).X;
                 if ((int)test.FindCharacterPos((uint)i).X > length * count)
                 {
                     count++;
-                    CuttedMessage.Add(Message.Substring(lasti, i - lasti));
+                    CuttedMessage.Add(_message.Substring(lasti, i - lasti));
                     lasti = i;
                 }
 
-                else if (i == Message.Length - 1)
+                else if (i == _message.Length - 1)
                 {
-                    CuttedMessage.Add(Message.Substring(lasti, i - lasti + 1));
+                    CuttedMessage.Add(_message.Substring(lasti, i - lasti + 1));
                 }
             }
 

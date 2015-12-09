@@ -70,7 +70,7 @@ namespace Lost_Soul
             {
                 s = new SFML.Graphics.Sprite(Program.Data.SpriteBasedOnType(SpriteType.BuildingSprite)[Program.Data.GetBuildableList()[ID].StartSprite]);
             }
-            s.Position = new Vector2f((X + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX) * Program.Data.TileSizeX, (Y + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY) * Program.Data.TileSizeY);
+            s.Position = new Vector2f((X + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX) * Program.Data.TileSizeX, (Y + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY) * Program.Data.TileSizeY);
             s.TextureRect = new IntRect(0, (int)(s.Texture.Size.Y - Program.Data.GetBuildableList()[ID].SizeY * 16), (int)(s.Texture.Size.X), Program.Data.GetBuildableList()[ID].SizeY * 16);
             rw.Draw(s);
         }
@@ -80,7 +80,7 @@ namespace Lost_Soul
             if (Builded)
             {
                 SFML.Graphics.Sprite s = new SFML.Graphics.Sprite(Program.Data.SpriteBasedOnType(SpriteType.BuildingSprite)[Program.Data.GetBuildableList()[ID].Sprite]);
-                s.Position = new Vector2f((X + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX) * Program.Data.TileSizeX, (Y + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY - 1) * Program.Data.TileSizeX);
+                s.Position = new Vector2f((X + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX) * Program.Data.TileSizeX, (Y + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY - 1) * Program.Data.TileSizeX);
                 s.TextureRect = new IntRect(0, 0, (int)(s.Texture.Size.X), (int)(s.Texture.Size.Y - Program.Data.GetBuildableList()[ID].SizeY * 16));
                 rw.Draw(s);
             }
@@ -89,7 +89,7 @@ namespace Lost_Soul
         public virtual void DrawBot(RenderWindow rw, int x, int y, bool yaynay)
         {
             SFML.Graphics.Sprite s = new SFML.Graphics.Sprite(Program.Data.SpriteBasedOnType(SpriteType.BuildingSprite)[Program.Data.GetBuildableList()[ID].Sprite]);
-            s.Position = new Vector2f((x + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX) * Program.Data.TileSizeX, (y + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY) * Program.Data.TileSizeY);
+            s.Position = new Vector2f((x + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX) * Program.Data.TileSizeX, (y + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY) * Program.Data.TileSizeY);
             s.TextureRect = new IntRect(0, (int)(s.Texture.Size.Y - Program.Data.GetBuildableList()[ID].SizeY * 16), (int)(s.Texture.Size.X), Program.Data.GetBuildableList()[ID].SizeY * 16);
             rw.Draw(s);
             RectangleShape r = new RectangleShape(new Vector2f((int)(s.Texture.Size.X), Program.Data.GetBuildableList()[ID].SizeY * 16));
@@ -109,7 +109,7 @@ namespace Lost_Soul
         public virtual void DrawTop(RenderWindow rw, int x, int y, bool yaynay)
         {
             SFML.Graphics.Sprite s = new SFML.Graphics.Sprite(Program.Data.SpriteBasedOnType(SpriteType.BuildingSprite)[Program.Data.GetBuildableList()[ID].Sprite]);
-            s.Position = new Vector2f((x + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX) * Program.Data.TileSizeX, (y + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY - 1) * Program.Data.TileSizeX);
+            s.Position = new Vector2f((x + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX) * Program.Data.TileSizeX, (y + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY - 1) * Program.Data.TileSizeX);
             s.TextureRect = new IntRect(0, 0, (int)(s.Texture.Size.X), (int)(s.Texture.Size.Y - Program.Data.GetBuildableList()[ID].SizeY * 16));
             rw.Draw(s);
             if (Program.Data.GetBuildableList()[ID].SizeY > 1)

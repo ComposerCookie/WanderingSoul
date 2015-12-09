@@ -17,7 +17,7 @@ namespace Lost_Soul
             Dir = 3;
             Range = range;
             MaxHealth = maxHP;
-            CurHP = MaxHealth;
+            CurrentHealth = MaxHealth;
             AvailableAttack = availatk;
             AttackSpeed = atkspd;
             Ranged = false;
@@ -30,7 +30,7 @@ namespace Lost_Soul
 
         public override void Update()
         {
-            if (CurHP <= 0)
+            if (CurrentHealth <= 0)
             {
                 CurMap.SpawnedLivingThing[Y + CurMap.MinY][X + CurMap.MinX].Remove(Index);
                 CurMap.LivingThing[CurMap.LivingThing.IndexOf(this)] = null;

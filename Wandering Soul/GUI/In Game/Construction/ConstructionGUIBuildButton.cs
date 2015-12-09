@@ -25,13 +25,13 @@ namespace Lost_Soul
         {
             if (Mouse.IsButtonPressed(Mouse.Button.Left))
             {
-                ConstructionGUI g = (ConstructionGUI)Program.SM.States[1].GameGUI[9];
-                if (Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[g.LocY][g.LocX] > -1)
+                ConstructionGUI g = (ConstructionGUI)Program.State[1].GameGUI[9];
+                if (Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[g.LocY][g.LocX] > -1)
                 {
-                    Program.Data.CurrentParty.MainParty.MyParty[0].CurrentAction = 2;
+                    Logic.CurrentParty.MainParty.MyParty[0].CurrentAction = 2;
                 }
             }
-            //    Program.SM.States[1].GameGUI[8].Visibility = !Program.SM.States[1].GameGUI[8].Visibility;
+            //    Program.State[1].GameGUI[8].Visibility = !Program.State[1].GameGUI[8].Visibility;
         }
         public bool isMouseHover()
         {

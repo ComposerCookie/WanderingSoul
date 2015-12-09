@@ -38,7 +38,7 @@ namespace Lost_Soul
         public void Update() { }
 
         public void Clicked() { }
-        public void Picked() { Program.SM.States[1].GameGUI[5].Visibility = true; }
+        public void Picked() { Program.State[1].GameGUI[5].Visibility = true; }
         public bool isMouseHover() { return false; }
         public bool isFocused() { return false; }
         public int ID { get; set; }

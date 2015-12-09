@@ -36,7 +36,7 @@ namespace Lost_Soul
             s.Position = new Vector2f(X, Y);
             _screen.Draw(s);
 
-            NewPartyGUI g = (NewPartyGUI)Program.SM.States[0].GameGUI[3];
+            NewPartyGUI g = (NewPartyGUI)Program.State[0].GameGUI[3];
             if (g.CurrentSession != null)
             {
                 if (SlotID < g.CurrentSession.MainParty.MyParty.Count)

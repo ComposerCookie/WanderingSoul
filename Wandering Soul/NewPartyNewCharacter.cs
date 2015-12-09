@@ -22,14 +22,14 @@ namespace Lost_Soul
         }
         public void Picked()
         {
-            NewPartyGUI g = (NewPartyGUI)Program.SM.States[0].GameGUI[3];
+            NewPartyGUI g = (NewPartyGUI)Program.State[0].GameGUI[3];
             if (g.CurrentSession.MainParty.MyParty.Count < 4 && g.CurrentSession.MainParty.MyParty.Count < Program.Data.PartySlotUnlock)
             {
-                CharacterCreationGUI c = (CharacterCreationGUI)Program.SM.States[0].GameGUI[4];
+                CharacterCreationGUI c = (CharacterCreationGUI)Program.State[0].GameGUI[4];
                 c.Initialize(g.CurrentSession.MainParty);
-                Program.SM.States[0].GameGUI[3].Visibility = false;
-                Program.SM.States[0].GameGUI[4].Visibility = true;
-                Program.SM.States[0].CurrentGUI = 4;
+                Program.State[0].GameGUI[3].Visibility = false;
+                Program.State[0].GameGUI[4].Visibility = true;
+                Program.State[0].CurrentGUI = 4;
             }
         }
         public bool isMouseHover()
@@ -38,7 +38,7 @@ namespace Lost_Soul
         }
         public void Draw()
         {
-            NewPartyGUI g = (NewPartyGUI)Program.SM.States[0].GameGUI[3];
+            NewPartyGUI g = (NewPartyGUI)Program.State[0].GameGUI[3];
             if (g.CurrentSession.MainParty.MyParty.Count < 4 && g.CurrentSession.MainParty.MyParty.Count < Program.Data.PartySlotUnlock)
             {
                 SFML.Graphics.Sprite s = new SFML.Graphics.Sprite(Program.Data.SpriteBasedOnType(SpriteType.Button)[ID]);

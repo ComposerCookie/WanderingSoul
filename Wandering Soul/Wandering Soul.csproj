@@ -75,11 +75,6 @@
     <Compile Include="Blueprint.cs" />
     <Compile Include="Body.cs" />
     <Compile Include="BuildableHouse.cs" />
-    <Compile Include="Equipment.cs" />
-    <Compile Include="FPSCounter.cs" />
-    <Compile Include="Inventory.cs" />
-    <Compile Include="InventorySpace.cs" />
-    <Compile Include="JobsData.cs" />
     <Compile Include="StartBuildAction.cs" />
     <Compile Include="CharacterCreationArrowLeft.cs" />
     <Compile Include="CharacterCreationArrowRight.cs" />
@@ -281,10 +276,6 @@
     <Compile Include="SpawnResource.cs" />
     <Compile Include="Items\ToolItem.cs" />
     <Compile Include="Items\ToolType.cs" />
-    <Compile Include="StateManager.cs" />
-    <Compile Include="StateType.cs" />
-    <Compile Include="StatsData.cs" />
-    <Compile Include="StatsType.cs" />
     <Compile Include="TileVariation.cs" />
     <Compile Include="TreeResource.cs" />
     <Compile Include="Items\WeaponItem.cs" />

@@ -22,7 +22,7 @@ namespace Lost_Soul
         }
         public void Picked()
         {
-            NewWorldGUI g = (NewWorldGUI)Program.SM.States[0].GameGUI[6];
+            NewWorldGUI g = (NewWorldGUI)Program.State[0].GameGUI[6];
             NewWorldName b = (NewWorldName)g.MyButton[0];
             if (b.Text.Equals(""))
             {
@@ -33,9 +33,9 @@ namespace Lost_Soul
                 g.CurrentSession.Name = b.Text;
                 Program.Data.MyWorldData.Add(g.CurrentSession);
             }
-            Program.SM.States[0].GameGUI[6].Visibility = false;
-            Program.SM.States[0].GameGUI[5].Visibility = true;
-            Program.SM.States[0].CurrentGUI = 5;
+            Program.State[0].GameGUI[6].Visibility = false;
+            Program.State[0].GameGUI[5].Visibility = true;
+            Program.State[0].CurrentGUI = 5;
         }
         public bool isMouseHover()
         {

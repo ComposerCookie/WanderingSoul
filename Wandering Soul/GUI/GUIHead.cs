@@ -26,16 +26,16 @@ namespace Lost_Soul
         {
             if (Mouse.IsButtonPressed(Mouse.Button.Left))
             {
-                TempX = Mouse.GetPosition(_screen).X - Program.SM.States[StateID].GameGUI[GUIID].X;
-                TempY = Mouse.GetPosition(_screen).Y - Program.SM.States[StateID].GameGUI[GUIID].Y;
-                Program.SM.States[StateID].CurrentGUI = GUIID;
-                Program.SM.States[StateID].GameGUI[GUIID].Moving = true;
+                TempX = Mouse.GetPosition(_screen).X - Program.State[StateID].GameGUI[GUIID].X;
+                TempY = Mouse.GetPosition(_screen).Y - Program.State[StateID].GameGUI[GUIID].Y;
+                Program.State[StateID].CurrentGUI = GUIID;
+                Program.State[StateID].GameGUI[GUIID].Moving = true;
                 Program.MouseState = (int)MouseStateType.Dragging;
             }
 
             else
             {
-                Program.SM.States[StateID].GameGUI[GUIID].Moving = false;
+                Program.State[StateID].GameGUI[GUIID].Moving = false;
                 Program.MouseState = (int)MouseStateType.Normal;
             }
         }

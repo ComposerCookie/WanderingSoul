@@ -23,7 +23,7 @@ namespace Lost_Soul
         public void Picked()
         {
             //Logic.MainMap = Program.Generator.NewMap();
-            PickWorldGUI g = (PickWorldGUI)Program.SM.States[0].GameGUI[5];
+            PickWorldGUI g = (PickWorldGUI)Program.State[0].GameGUI[5];
             if (g.SaveDown - 1 >= 0)
                 g.SaveDown--;
         }

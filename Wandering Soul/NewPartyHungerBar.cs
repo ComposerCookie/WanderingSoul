@@ -32,7 +32,7 @@ namespace Lost_Soul
         {
             SFML.Graphics.Sprite s = new SFML.Graphics.Sprite();
 
-            NewPartyGUI g = (NewPartyGUI)Program.SM.States[0].GameGUI[3];
+            NewPartyGUI g = (NewPartyGUI)Program.State[0].GameGUI[3];
             if (g.CurrentSession != null)
             {
                 if (SlotID < g.CurrentSession.MainParty.MyParty.Count)

@@ -24,9 +24,9 @@ namespace Lost_Soul
         {
             //Logic.MainMap = Program.Generator.NewMap();
             //Program.InState = 1;
-            Program.SM.States[0].GameGUI[0].Visibility = false;
-            Program.SM.States[0].GameGUI[1].Visibility = true;
-            Program.SM.States[0].GameGUI[2].Visibility = true;
+            Program.State[0].GameGUI[0].Visibility = false;
+            Program.State[0].GameGUI[1].Visibility = true;
+            Program.State[0].GameGUI[2].Visibility = true;
         }
         public bool isMouseHover()
         {

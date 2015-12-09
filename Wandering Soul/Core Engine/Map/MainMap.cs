@@ -10,30 +10,30 @@ namespace Lost_Soul
 {
     public class MainMap : Map
     {
-        public int MinX { get; set; }
-        public int MinY { get; set; }
-        public int MaxX { get; set; }
-        public int MaxY { get; set; }
+        int _minX;
+        int _minY;
+        int _maxX;
+        int _maxY;
 
-        public List<RowTile> Y { get; set; }
-        public List<Terrain> SpawnedTerrain { get; set; }
-        public List<SpawnSpawnable> SpawnedSpawnable { get; set; }
-        public List<List<int>> SpawnedSpawnableLocation { get; set; }
-        public List<List<List<int>>> SpawnedLivingObjects { get; set; }
-        public List<List<List<SpawnItems>>> Drop { get; set; }
+        List<RowTile> _y;
+        List<Terrain> _spawnedTerrain;
+        List<SpawnSpawnable> _spawnedSpawnable;
+        List<List<int>> _spawnedSpawnableLocation;
+        List<List<List<int>>> _spawnedLivingObjects;
+        List<List<List<SpawnItems>>> _drop;
 
         public MainMap()
         {
-            MinX = -1;
-            MinY = -1;
-            MaxX = -1;
-            MaxY = -1;
-            Y = new List<RowTile>();
-            SpawnedTerrain = new List<Terrain>();
-            SpawnedSpawnable = new List<SpawnSpawnable>();
-            SpawnedSpawnableLocation = new List<List<int>>();
-            SpawnedLivingObjects = new List<List<List<int>>>();
-            Drop = new List<List<List<SpawnItems>>>();
+            _minX = -1;
+            _minY = -1;
+            _maxX = -1;
+            _maxY = -1;
+            _y = new List<RowTile>();
+            _spawnedTerrain = new List<Terrain>();
+            _spawnedSpawnable = new List<SpawnSpawnable>();
+            _spawnedSpawnableLocation = new List<List<int>>();
+            _spawnedLivingObjects = new List<List<List<int>>>();
+            _drop = new List<List<List<SpawnItems>>>();
             AtkM = new AttackManager(this);
             AnimM = new AnimationManager();
             NullList = new List<int>();
@@ -53,9 +53,9 @@ namespace Lost_Soul
                     MiniText.RemoveAt(i);
             }
 
-            for (int r = Program.Data.CurrentParty.MainParty.MyParty[0].Y + MinY - Program.VisibleMaxY / 2 - 3; r < Program.Data.CurrentParty.MainParty.MyParty[0].Y + MinY + Program.VisibleMaxY / 2 + 3; r++)
+            for (int r = Logic.CurrentParty.MainParty.MyParty[0].Y + _minY - Program.VisibleMaxY / 2 - 3; r < Logic.CurrentParty.MainParty.MyParty[0].Y + _minY + Program.VisibleMaxY / 2 + 3; r++)
             {
-                for (int t = Program.Data.CurrentParty.MainParty.MyParty[0].X + MinX - Program.VisibleMaxX / 2 - 3; t < Program.Data.CurrentParty.MainParty.MyParty[0].X + MinX + Program.VisibleMaxX / 2 + 3; t++)
+                for (int t = Logic.CurrentParty.MainParty.MyParty[0].X + _minX - Program.VisibleMaxX / 2 - 3; t < Logic.CurrentParty.MainParty.MyParty[0].X + _minX + Program.VisibleMaxX / 2 + 3; t++)
                 {
                     if (SpawnedSpawnableLocation[r][t] == -1)
                         continue;
@@ -78,9 +78,9 @@ namespace Lost_Soul
         public void DrawMap(RenderWindow rw)
         {
             SFML.Graphics.Sprite s;
-            for (int r = Program.Data.CurrentParty.MainParty.MyParty[0].Y + MinY - Program.VisibleMaxY / 2 - 3; r < Program.Data.CurrentParty.MainParty.MyParty[0].Y + MinY + Program.VisibleMaxY / 2 + 3; r++)
+            for (int r = Logic.CurrentParty.MainParty.MyParty[0].Y + _minY - Program.VisibleMaxY / 2 - 3; r < Logic.CurrentParty.MainParty.MyParty[0].Y + _minY + Program.VisibleMaxY / 2 + 3; r++)
             {
-                for (int t = Program.Data.CurrentParty.MainParty.MyParty[0].X + MinX - Program.VisibleMaxX / 2 - 3; t < Program.Data.CurrentParty.MainParty.MyParty[0].X + MinX + Program.VisibleMaxX / 2 + 3; t++)
+                for (int t = Logic.CurrentParty.MainParty.MyParty[0].X + _minX - Program.VisibleMaxX / 2 - 3; t < Logic.CurrentParty.MainParty.MyParty[0].X + _minX + Program.VisibleMaxX / 2 + 3; t++)
                 {
                     if (_y[r].Tile[t].ID == -1)
                         continue;
@@ -105,7 +105,7 @@ namespace Lost_Soul
             {
                 if (LivingThing[i] == null)
                     continue;
-                if (LivingThing[i].X + MinX < Program.Data.CurrentParty.MainParty.MyParty[0].X + MinX + Program.VisibleMaxX / 2 + 3 && LivingThing[i].X + MinX > Program.Data.CurrentParty.MainParty.MyParty[0].X + MinX - Program.VisibleMaxX / 2 - 3 && LivingThing[i].Y + MinY < Program.Data.CurrentParty.MainParty.MyParty[0].Y + MinY + Program.VisibleMaxY / 2 + 3 && LivingThing[i].Y + MinY > Program.Data.CurrentParty.MainParty.MyParty[0].Y + MinY - Program.VisibleMaxY / 2 - 3)
+                if (LivingThing[i].X + _minX < Logic.CurrentParty.MainParty.MyParty[0].X + _minX + Program.VisibleMaxX / 2 + 3 && LivingThing[i].X + _minX > Logic.CurrentParty.MainParty.MyParty[0].X + _minX - Program.VisibleMaxX / 2 - 3 && LivingThing[i].Y + _minY < Logic.CurrentParty.MainParty.MyParty[0].Y + _minY + Program.VisibleMaxY / 2 + 3 && LivingThing[i].Y + _minY > Logic.CurrentParty.MainParty.MyParty[0].Y + _minY - Program.VisibleMaxY / 2 - 3)
                 {
                     LivingThing[i].Draw(rw);
                 }
@@ -120,26 +120,26 @@ namespace Lost_Soul
 
         public void DrawSpawnBot(RenderWindow rw)
         {
-            for (int r = Program.Data.CurrentParty.MainParty.MyParty[0].Y + MinY - Program.VisibleMaxY / 2 - 3; r < Program.Data.CurrentParty.MainParty.MyParty[0].Y + MinY + Program.VisibleMaxY / 2 + 3; r++)
+            for (int r = Logic.CurrentParty.MainParty.MyParty[0].Y + _minY - Program.VisibleMaxY / 2 - 3; r < Logic.CurrentParty.MainParty.MyParty[0].Y + _minY + Program.VisibleMaxY / 2 + 3; r++)
             {
-                for (int t = Program.Data.CurrentParty.MainParty.MyParty[0].X + MinX - Program.VisibleMaxX / 2 - 3; t < Program.Data.CurrentParty.MainParty.MyParty[0].X + MinX + Program.VisibleMaxX / 2 + 3; t++)
+                for (int t = Logic.CurrentParty.MainParty.MyParty[0].X + _minX - Program.VisibleMaxX / 2 - 3; t < Logic.CurrentParty.MainParty.MyParty[0].X + _minX + Program.VisibleMaxX / 2 + 3; t++)
                 {
-                    if (SpawnedSpawnableLocation[r][t] == -1)
+                    if (_spawnedSpawnableLocation[r][t] == -1)
                         continue;
-                    SpawnedSpawnable[SpawnedSpawnableLocation[r][t]].DrawBot(rw);
+                    _spawnedSpawnable[_spawnedSpawnableLocation[r][t]].DrawBot(rw);
                 }
             }
         }
 
         public void DrawSpawnFringe(RenderWindow rw)
         {
-            for (int r = Program.Data.CurrentParty.MainParty.MyParty[0].Y + MinY - Program.VisibleMaxY / 2 - 3; r < Program.Data.CurrentParty.MainParty.MyParty[0].Y + MinY + Program.VisibleMaxY / 2 + 3; r++)
+            for (int r = Logic.CurrentParty.MainParty.MyParty[0].Y + _minY - Program.VisibleMaxY / 2 - 3; r < Logic.CurrentParty.MainParty.MyParty[0].Y + _minY + Program.VisibleMaxY / 2 + 3; r++)
             {
-                for (int t = Program.Data.CurrentParty.MainParty.MyParty[0].X + MinX - Program.VisibleMaxX / 2 - 3; t < Program.Data.CurrentParty.MainParty.MyParty[0].X + MinX + Program.VisibleMaxX / 2 + 3; t++)
+                for (int t = Logic.CurrentParty.MainParty.MyParty[0].X + _minX - Program.VisibleMaxX / 2 - 3; t < Logic.CurrentParty.MainParty.MyParty[0].X + _minX + Program.VisibleMaxX / 2 + 3; t++)
                 {
-                    if (SpawnedSpawnableLocation[r][t] == -1)
+                    if (_spawnedSpawnableLocation[r][t] == -1)
                         continue;
-                    SpawnedSpawnable[SpawnedSpawnableLocation[r][t]].DrawTop(rw);
+                    _spawnedSpawnable[_spawnedSpawnableLocation[r][t]].DrawTop(rw);
                 }
             }
         }
@@ -148,6 +148,66 @@ namespace Lost_Soul
         {
             LivingThing.Add(p);
             SpawnedLivingThing[y + MinY][x + MinX].Add(LivingThing.Count - 1);
+        }
+
+        public int MinX
+        {
+            get { return _minX; }
+            set { _minX = value; }
+        }
+
+        public int MinY
+        {
+            get { return _minY; }
+            set { _minY = value; }
+        }
+
+        public int MaxX
+        {
+            get { return _maxX; }
+            set { _maxX = value; }
+        }
+
+        public int MaxY
+        {
+            get { return _maxY; }
+            set { _maxY = value; }
+        }
+
+        public List<RowTile> Y
+        {
+            get { return _y; }
+            set { _y = value; }
+        }
+
+        public List<Terrain> SpawnedTerrain
+        {
+            get { return _spawnedTerrain; }
+            set { _spawnedTerrain = value; }
+        }
+
+        public List<SpawnSpawnable> SpawnedSpawnable
+        {
+            get { return _spawnedSpawnable; }
+            set { _spawnedSpawnable = value; }
+        }
+
+        public List<List<int>> SpawnedSpawnableLocation
+        {
+            get { return _spawnedSpawnableLocation; }
+            set { _spawnedSpawnableLocation = value; }
+        }
+
+        public List<List<List<SpawnItems>>> Drop
+        {
+            get { return _drop; }
+            set { _drop = value; }
+        }
+
+        public List<List<List<int>>> SpawnedLivingThing
+        {
+            get{return _spawnedLivingObjects;}
+            set{_spawnedLivingObjects = value;}
         }
 
         public AttackManager AtkM { get; set; }

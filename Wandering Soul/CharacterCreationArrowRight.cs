@@ -23,7 +23,7 @@ namespace Lost_Soul
         }
         public void Picked()
         {
-            CharacterCreationGUI g = (CharacterCreationGUI)Program.SM.States[0].GameGUI[4];
+            CharacterCreationGUI g = (CharacterCreationGUI)Program.State[0].GameGUI[4];
             if (Mouse.IsButtonPressed(Mouse.Button.Left))
             {
                 switch (SlotID)

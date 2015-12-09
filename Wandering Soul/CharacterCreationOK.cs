@@ -22,7 +22,7 @@ namespace Lost_Soul
         }
         public void Picked()
         {
-            CharacterCreationGUI g = (CharacterCreationGUI)Program.SM.States[0].GameGUI[4];
+            CharacterCreationGUI g = (CharacterCreationGUI)Program.State[0].GameGUI[4];
             CharacterCreationName b = (CharacterCreationName)g.MyButton[1];
             if (b.Text.Equals(""))
             {
@@ -31,12 +31,12 @@ namespace Lost_Soul
             else
             {
                 NPC n = new NPC(b.Text, (int)LivingObjectType.NPC, g.CurGender, 0, false, g.CurBody, g.CurFace, g.CurHair, g.CurHairColor, (int)MapType.MainMap, true, 4, 8, 0, g.CurrentSession.MyParty.Count);
-                n.Inventory.PutItem(new SpawnItems(1));
+                n.Inventory[0] = new SpawnItems(1);
                 g.CurrentSession.MyParty.Add(n);
             }
-            Program.SM.States[0].GameGUI[4].Visibility = false;
-            Program.SM.States[0].GameGUI[3].Visibility = true;
-            Program.SM.States[0].CurrentGUI = 3;
+            Program.State[0].GameGUI[4].Visibility = false;
+            Program.State[0].GameGUI[3].Visibility = true;
+            Program.State[0].CurrentGUI = 3;
         }
         public bool isMouseHover()
         {

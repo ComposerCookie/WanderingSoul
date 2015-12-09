@@ -21,30 +21,30 @@ namespace Lost_Soul
             Y = y;
             Visibility = true;
 
-            MyButton.Add(new RightClickExamineButton(rw, 37, X, Y + MyButton.Count * 20, corX + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX, corY + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY));
+            MyButton.Add(new RightClickExamineButton(rw, 37, X, Y + MyButton.Count * 20, corX + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX, corY + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY));
 
-            if (Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[corY + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY][corX + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX] > -1)
+            if (Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[corY + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY][corX + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX] > -1)
             {
-                int i = Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[corY + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY][corX + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX];
-                if (Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[i] is SpawnBuildable)
+                int i = Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnableLocation[corY + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY][corX + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX];
+                if (Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[i] is SpawnBuildable)
                 {
-                    if (Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[i] is SpawnBuildable)
+                    if (Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[i] is SpawnBuildable)
                     {
-                        MyButton.Add(new RightClickLitFireButton(rw, 37, X, Y + MyButton.Count * 20, corX + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX, corY + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY));
+                        MyButton.Add(new RightClickLitFireButton(rw, 37, X, Y + MyButton.Count * 20, corX + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX, corY + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY));
                     }
                 }
-                else if (Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[i] is SpawnResource)
+                else if (Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedSpawnable[i] is SpawnResource)
                 {
-                    MyButton.Add(new RightClickWalkHarvest(rw, 37, X, Y + MyButton.Count * 20, corX + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX, corY + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY));
+                    MyButton.Add(new RightClickWalkHarvest(rw, 37, X, Y + MyButton.Count * 20, corX + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX, corY + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY));
                 }
             }
-            if (Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedLivingThing[corY + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY][corX + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX].Count > 0)
+            if (Logic.CurrentParty.MainParty.MyParty[0].CurMap.SpawnedLivingThing[corY + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY][corX + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX].Count > 0)
             {
-                MyButton.Add(new RightClickWalkAttack(rw, 37, X, Y + MyButton.Count * 20, corX + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX, corY + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY));
+                MyButton.Add(new RightClickWalkAttack(rw, 37, X, Y + MyButton.Count * 20, corX + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX, corY + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY));
             }
 
-            MyButton.Add(new RightClickWalk(rw, 37, X, Y + MyButton.Count * 20, corX + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX, corY + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY));
-            MyButton.Add(new RightClickPickButton(rw, 37, X, Y + MyButton.Count * 20, corX + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinX, corY + Program.Data.CurrentParty.MainParty.MyParty[0].CurMap.MinY));
+            MyButton.Add(new RightClickWalk(rw, 37, X, Y + MyButton.Count * 20, corX + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX, corY + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY));
+            MyButton.Add(new RightClickPickButton(rw, 37, X, Y + MyButton.Count * 20, corX + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinX, corY + Logic.CurrentParty.MainParty.MyParty[0].CurMap.MinY));
         }
 
         public void HandleMouseMove()

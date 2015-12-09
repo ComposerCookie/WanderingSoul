@@ -68,7 +68,7 @@ namespace Lost_Soul
                     if ((p is Hostile && Caster is NPC) || (p is NPC && Caster is Hostile))
                     {
                         dmg = (int)(ID.BaseDamage * ((float)Logic.RandomizeDamage() / 10));
-                        //p.ReceiveDamage(dmg, Caster);
+                        p.ReceiveDamage(dmg, Caster);
                     }
                 }
             }

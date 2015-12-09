@@ -23,18 +23,18 @@ namespace Lost_Soul
         public void Picked()
         {
             //Logic.MainMap = Program.Generator.NewMap();
-            PickWorldGUI g = (PickWorldGUI)Program.SM.States[0].GameGUI[5];
+            PickWorldGUI g = (PickWorldGUI)Program.State[0].GameGUI[5];
             if (Mouse.IsButtonPressed(Mouse.Button.Left))
             {
-                if (Program.Data.MyPlayerDatas.Count > 0)
+                if (Program.Data.MyPlayerData.Count > 0)
                 {
                     if (g.SelectedWorld < Program.Data.MyWorldData.Count)
                     {
-                        Program.Data.CurrentWorld = Program.Data.MyWorldData[g.SelectedWorld];
+                        Logic.CurrentWorld = Program.Data.MyWorldData[g.SelectedWorld];
                         
 
-                        Program.SM.States[0].GameGUI[5].Visibility = false;
-                        Program.SM.States[0].GameGUI[0].Visibility = true;
+                        Program.State[0].GameGUI[5].Visibility = false;
+                        Program.State[0].GameGUI[0].Visibility = true;
                         Logic.SwitchState(1);
                     }
                 }

@@ -26,17 +26,17 @@ namespace Lost_Soul
         {
             if (Mouse.IsButtonPressed(Mouse.Button.Left))
             {
-                KnowledgeGUI g = (KnowledgeGUI)Program.SM.States[1].GameGUI[11];
+                KnowledgeGUI g = (KnowledgeGUI)Program.State[1].GameGUI[11];
                 if (g.KnowledgeDown + SlotID < Program.Data.MyKnowledge.Count)
                 {
                     if (Mouse.GetPosition(_screen).X > X + 152 && Mouse.GetPosition(_screen).X < X + 176 && Mouse.GetPosition(_screen).Y > Y + 12 && Mouse.GetPosition(_screen).Y < Y + 26)
                     {
-                        if (!Program.Data.CurrentParty.MainParty.MyParty[0].KnowledgeKnown.Contains(g.KnowledgeDown + SlotID))
+                        if (!Logic.CurrentParty.MainParty.MyParty[0].KnowledgeKnown.Contains(g.KnowledgeDown + SlotID))
                         {
-                            if (Program.Data.CurrentParty.MainParty.MyParty[0].LearningPoint >= Program.Data.MyKnowledge[g.KnowledgeDown + SlotID].Cost)
+                            if (Logic.CurrentParty.MainParty.MyParty[0].LearningPoint >= Program.Data.MyKnowledge[g.KnowledgeDown + SlotID].Cost)
                             {
-                                Program.Data.CurrentParty.MainParty.MyParty[0].KnowledgeKnown.Add(g.KnowledgeDown + SlotID);
-                                Program.Data.CurrentParty.MainParty.MyParty[0].LearningPoint -= Program.Data.MyKnowledge[g.KnowledgeDown + SlotID].Cost;
+                                Logic.CurrentParty.MainParty.MyParty[0].KnowledgeKnown.Add(g.KnowledgeDown + SlotID);
+                                Logic.CurrentParty.MainParty.MyParty[0].LearningPoint -= Program.Data.MyKnowledge[g.KnowledgeDown + SlotID].Cost;
                             }
                         }
                     }
@@ -58,7 +58,7 @@ namespace Lost_Soul
             t.CharacterSize = 11;
             t.Color = Color.Yellow;
 
-            KnowledgeGUI g = (KnowledgeGUI)Program.SM.States[1].GameGUI[11];
+            KnowledgeGUI g = (KnowledgeGUI)Program.State[1].GameGUI[11];
             switch (g.CurView)
             {
                 case 0:
@@ -72,7 +72,7 @@ namespace Lost_Soul
                         t.Position = new Vector2f(X + 30, Y + 5);
                         _screen.Draw(t);
 
-                        if (Program.Data.CurrentParty.MainParty.MyParty[0].KnowledgeKnown.Contains(g.KnowledgeDown + SlotID))
+                        if (Logic.CurrentParty.MainParty.MyParty[0].KnowledgeKnown.Contains(g.KnowledgeDown + SlotID))
                             s = new SFML.Graphics.Sprite(Program.Data.SpriteBasedOnType(SpriteType.Button)[62]);
                         else
                             s = new SFML.Graphics.Sprite(Program.Data.SpriteBasedOnType(SpriteType.Button)[59]);

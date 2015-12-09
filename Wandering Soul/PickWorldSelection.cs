@@ -35,7 +35,7 @@ namespace Lost_Soul
             s.Position = new Vector2f(X, Y);
             _screen.Draw(s);
 
-            PickWorldGUI g = (PickWorldGUI)Program.SM.States[0].GameGUI[5];
+            PickWorldGUI g = (PickWorldGUI)Program.State[0].GameGUI[5];
 
             Text t = new Text();
             t.CharacterSize = 11;

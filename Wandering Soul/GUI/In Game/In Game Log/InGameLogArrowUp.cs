@@ -25,12 +25,12 @@ namespace Lost_Soul
         {
             if (Mouse.IsButtonPressed(Mouse.Button.Left))
             {
-                InGameLogGUI g = (InGameLogGUI)Program.SM.States[1].GameGUI[4];
+                InGameLogGUI g = (InGameLogGUI)Program.State[1].GameGUI[4];
                 g.Log.MinMsg--;
                 g.Log.IsScrolling = true;
             }
             //if (Mouse.IsButtonPressed(Mouse.Button.Left))
-            //Program.SM.States[1].GameGUI[1].Visibility = !Program.SM.States[1].GameGUI[1].Visibility;
+            //Program.State[1].GameGUI[1].Visibility = !Program.State[1].GameGUI[1].Visibility;
         }
         public bool isMouseHover()
         {

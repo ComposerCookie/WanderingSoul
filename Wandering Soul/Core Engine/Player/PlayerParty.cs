@@ -7,43 +7,49 @@ namespace Lost_Soul
 {
     public class PlayerParty : Party
     {
-        public List<NPC> MyParty { get; set; }
+        List<NPC> _myParty;
         public PlayerParty()
         {
-            MyParty = new List<NPC>();
+            _myParty = new List<NPC>();
+        }
+
+        public List<NPC> MyParty
+        {
+            get { return _myParty; }
+            set { _myParty = value; }
         }
 
         public void SwapMember(int memID)
         {
-            if (MyParty.Count < 2 || memID > MyParty.Count - 1)
+            if (_myParty.Count < 2 || memID > _myParty.Count - 1)
                 return;
 
-            NPC tempNPC = MyParty[0];
-            MyParty[0] = MyParty[memID];
-            MyParty[0].PlayerPartySlot = 0;
-            MyParty[memID] = tempNPC;
-            MyParty[memID].PlayerPartySlot = memID;
+            NPC tempNPC = _myParty[0];
+            _myParty[0] = _myParty[memID];
+            _myParty[0].PlayerParty = 0;
+            _myParty[memID] = tempNPC;
+            _myParty[memID].PlayerParty = memID;
         }
 
         public void AddMember(NPC npc)
         {
-            if (MyParty.Count > 4)
+            if (_myParty.Count > 4)
                 return;
 
-            MyParty.Add(npc);
-            npc.PlayerPartySlot = MyParty.Count - 1;
+            _myParty.Add(npc);
+            npc.PlayerParty = _myParty.Count - 1;
         }
 
         public void RemoveMember(NPC npc)
         {
-            npc.PlayerPartySlot = -1;
-            MyParty.Remove(npc);
+            npc.PlayerParty = -1;
+            _myParty.Remove(npc);
         }
 
         public void RemoveMember(int at)
         {
-            MyParty[at].PlayerPartySlot = -1;
-            MyParty.RemoveAt(at);
+            _myParty[at].PlayerParty = -1;
+            _myParty.RemoveAt(at);
         }
     }
 }

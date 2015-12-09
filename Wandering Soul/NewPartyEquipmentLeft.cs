@@ -35,14 +35,14 @@ namespace Lost_Soul
             s.Position = new Vector2f(X, Y);
             _screen.Draw(s);
 
-            NewPartyGUI g = (NewPartyGUI)Program.SM.States[0].GameGUI[3];
+            NewPartyGUI g = (NewPartyGUI)Program.State[0].GameGUI[3];
             if (g.CurrentSession != null)
             {
                 if (SlotID < g.CurrentSession.MainParty.MyParty.Count)
                 {
                     if (g.CurrentSession.MainParty.MyParty[SlotID].Equipment[11] != null)
                     {
-                        s.Texture = Program.Data.SpriteBasedOnType(SpriteType.Items)[Program.Data.MyPlayerDatas[SlotID].MainParty.MyParty[SlotID].Equipment[11].ID];
+                        s.Texture = Program.Data.SpriteBasedOnType(SpriteType.Items)[Program.Data.MyPlayerData[SlotID].MainParty.MyParty[SlotID].Equipment[11].ID];
                         s.Position = new Vector2f(X, Y);
                         _screen.Draw(s);
                     }

@@ -42,21 +42,21 @@ namespace Lost_Soul
             t.Font = Program.Data.Font;
             t.CharacterSize = 10;
             SFML.Graphics.Sprite s = new SFML.Graphics.Sprite(Program.Data.SpriteBasedOnType(SpriteType.GUI)[ID]);
-            for (int p = 0; p < Program.Data.CurrentParty.MainParty.MyParty.Count; p++)
+            for (int p = 0; p < Logic.CurrentParty.MainParty.MyParty.Count; p++)
             {
                 s.Position = new Vector2f(X, Y + (s.Texture.Size.Y + 10) * p);
                 _screen.SetView(new View(new FloatRect(0, 0, _screen.Size.X, _screen.Size.Y)));
                 _screen.Draw(s);
 
-                t.DisplayedString = Program.Data.CurrentParty.MainParty.MyParty[p].Name;
+                t.DisplayedString = Logic.CurrentParty.MainParty.MyParty[p].Name;
                 t.Position = new Vector2f(X + 50, Y + (s.Texture.Size.Y + 10) * p - 1);
                 _screen.Draw(t);
 
-                t.DisplayedString = "Level: " + Program.Data.CurrentParty.MainParty.MyParty[p].Level;
+                t.DisplayedString = "Level: " + Logic.CurrentParty.MainParty.MyParty[p].Level;
                 t.Position = new Vector2f(X + 100, Y + (s.Texture.Size.Y + 10) * p + 38);
                 _screen.Draw(t);
 
-                t.DisplayedString = Enum.GetName(typeof(JobType),(JobType)Program.Data.CurrentParty.MainParty.MyParty[p].Job);
+                t.DisplayedString = Enum.GetName(typeof(JobType),(JobType)Logic.CurrentParty.MainParty.MyParty[p].Job);
                 t.Position = new Vector2f(X + 50, Y + (s.Texture.Size.Y + 10) * p + 38);
                 _screen.Draw(t);
             }

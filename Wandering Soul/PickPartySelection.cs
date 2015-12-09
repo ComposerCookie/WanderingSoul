@@ -35,7 +35,7 @@ namespace Lost_Soul
             s.Position = new Vector2f(X, Y);
             _screen.Draw(s);
 
-            PickPartyGUI g = (PickPartyGUI)Program.SM.States[0].GameGUI[1];
+            PickPartyGUI g = (PickPartyGUI)Program.State[0].GameGUI[1];
 
             Text t = new Text();
             t.CharacterSize = 11;
@@ -44,15 +44,15 @@ namespace Lost_Soul
 
             for (int i = 0; i < 11; i++)
             {
-                if (i + g.SaveDown < Program.Data.MyPlayerDatas.Count)
+                if (i + g.SaveDown < Program.Data.MyPlayerData.Count)
                 {
-                    t.DisplayedString = Program.Data.MyPlayerDatas[i + g.SaveDown].MainParty.MyParty[0].Name + "'s Party";
+                    t.DisplayedString = Program.Data.MyPlayerData[i + g.SaveDown].MainParty.MyParty[0].Name + "'s Party";
                     t.Position = new Vector2f(X + 4, Y + 2 + 16 * i);
                     _screen.Draw(t);
                 }
             }
 
-            if (Program.Data.MyPlayerDatas.Count > 0)
+            if (Program.Data.MyPlayerData.Count > 0)
             {
                 s = new SFML.Graphics.Sprite(Program.Data.SpriteBasedOnType(SpriteType.Button)[SelectID]);
                 s.Position = new Vector2f(X, Y + 16 * g.SelectedParty);

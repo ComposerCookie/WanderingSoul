@@ -91,7 +91,7 @@ namespace Lost_Soul
         }
         public void Draw()
         {
-            CharacterCreationGUI g = (CharacterCreationGUI)Program.SM.States[0].GameGUI[4];
+            CharacterCreationGUI g = (CharacterCreationGUI)Program.State[0].GameGUI[4];
             SFML.Graphics.Sprite s = new SFML.Graphics.Sprite(Program.Data.SpriteBasedOnType(SpriteType.Body)[Program.Data.GetBodyBasedOnGender(g.CurGender)[g.CurBody].ID]);
             s.Position = new Vector2f(X, Y);
             s.TextureRect = GetNextFrame();

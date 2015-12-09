@@ -25,7 +25,7 @@ namespace Lost_Soul
         public void Picked()
         {
             //if (Mouse.IsButtonPressed(Mouse.Button.Left))
-                //Program.SM.States[1].GameGUI[2].Visibility = !Program.SM.States[1].GameGUI[2].Visibility;
+                //Program.State[1].GameGUI[2].Visibility = !Program.State[1].GameGUI[2].Visibility;
         }
         public bool isMouseHover()
         {
@@ -41,8 +41,8 @@ namespace Lost_Soul
             t.Font = Program.Data.Font;
             t.CharacterSize = 14;
 
-            CraftGUI g = (CraftGUI)Program.SM.States[1].GameGUI[10];
-            Items i = Program.Data.MyItems[Logic.KnownRecipeForThisCharacter(Program.Data.CurrentParty.MainParty.MyParty[0], g.CurClass).Count];
+            CraftGUI g = (CraftGUI)Program.State[1].GameGUI[10];
+            Items i = Program.Data.MyItems[Logic.KnownRecipeForThisCharacter(Logic.CurrentParty.MainParty.MyParty[0], g.CurClass).Count];
             {
                 if (SlotID + 3 * g.CurPage < i.ItemRequired.Count)
                 {
